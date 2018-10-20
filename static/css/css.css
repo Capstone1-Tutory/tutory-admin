@@ -1,0 +1,23 @@
+﻿    .row.content {height: auto;}
+      
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+     @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+    #menutop
+    {
+      padding-top: 65px;
+      background-color: #f1f1f1;
+      padding-left: 180px;
+      border:  solid 1px #0099FF;
+    }
