@@ -1,4 +1,4 @@
-﻿    .row.content {height: auto;}
+﻿     .row.content {height: auto;}
       
     /* Set gray background color and 100% height */
     .sidenav {
@@ -21,3 +21,33 @@
       padding-left: 180px;
       border:  solid 1px #0099FF;
     }
+    #lbname
+    {
+      font-weight: bold;
+      font-size: 22px;
+      padding-right: 30px;
+    }
+    #logo
+    {
+       font-size: 25px;
+        font-style: italic;
+        font-family: Verdana;
+    }
+.avatanews
+{
+  background-color: #FFFFFF;
+  border: 1px solid #EEEEEE;
+  border-radius: 10px;
+
+}
+.detailnews
+{
+  background-color: #FFFFFF;
+   border: 1px solid #EEEEEE;
+  border-radius: 10px;
+}
+.col-sm-2 sidenav
+{
+  border: 1px solid #EEEEEE;
+  border-radius: 10px;
+}
