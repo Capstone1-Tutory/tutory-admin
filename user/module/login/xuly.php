@@ -1,21 +1,18 @@
-<?php 
-include('../config.php') 
- $myusername=$_POST['username'];
- $mypassword=$_POST['password'];
+<?php include('../config.php') ;
  session_start();
-
  if(isset($_POST['btndangnhap']))
- {
- 	$sql="select * from user_account where USER_NAME='$myusername' and PASS_WORD='$mypassword'";
+ {  
+ 	$myusername=$_POST['Login_username'];
+    $mypassword=$_POST['Login_password'];
+ 	$sql="select * from user_account where USER_NAME='{$myusername}' and PASS_WORD='{$mypassword}'";
  	$result=mysqli_query($conn,$sql);
-    $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-    $active = $row['active'];
+    $row= mysqli_fetch_assoc($result);
       
     $count = mysqli_num_rows($result);
-    header("location:../../index.php");
+
     if($count==1)
     {
-    	session_register("username");
+    	
     	$_SESSION['login_username']=$myusername;
     	header("location:../../index.php");
     }

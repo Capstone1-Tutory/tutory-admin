@@ -5,13 +5,16 @@
         <a class="navbar-brand" href="#">Tutory</a>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <label class="control-label" name="lbname" value=""></label>
             <li class="nav-item ">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modallogin">Đăng Nhập</button>
-               
+              <button type="button" id="btndangnhapN" class="btn btn-primary" data-toggle="modal" data-target="#modallogin">Đăng Nhập</button>  
               </a>
             </li>
             <li class="nav-item ">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalregister">Đăng Kí</button>
+              <button type="button" class="btn btn-primary" id="btndangkiN" data-toggle="modal" data-target="#modalregister">Đăng Kí</button>
+               <li class="nav-item ">
+              <button type="button" class="btn btn-primary" id="btndangxuatN" data-toggle="modal" data-target="#modalregister">Đăng xuất</button>
             </li>
           </ul>
         </div>
@@ -37,7 +40,7 @@
            </div>
         </div> 
         <div class="modal-footer">
-           <button type="button" id="btndangnhap" class="btn btn-primary">Đăng Nhập</button>
+           <button type="submit" name="btndangnhap" class="btn btn-primary">Đăng Nhập</button>
            <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
         </div>
      </div>
