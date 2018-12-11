@@ -29,11 +29,11 @@
                   $result=mysqli_query($conn,$sql);
                  if($result)
                  
-                  echo "đăng kí thành công  <a href='javascript:history.back(-1)'>Quay lại trang trước</a>";
+                  echo "đăng kí thành công  <a href='index.php'>Quay lại trang trước</a>";
                  
                  else
                  
-                  echo "có lỗi xảy ra khi đăng kí'); window.location:../../index.php</script>";
+                  echo "có lỗi xảy ra khi đăng kí; window.location:../../index.php</script>";
                  
                 }
             
