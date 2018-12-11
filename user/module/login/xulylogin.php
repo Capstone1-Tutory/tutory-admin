@@ -12,7 +12,8 @@
     $count = mysqli_num_rows($result);
      if($count>0)
      {
-        $_SESSION['login_username']=$myusername;
+        $_SESSION["login_username"]=$row['USER_NAME'];
+        $_SESSION["id_user"]=$row["ID_USER"];
      }
     echo $count;
 

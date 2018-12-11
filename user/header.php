@@ -1,10 +1,21 @@
 <?php
 session_start();
 ?>
-<link rel="stylesheet" type="text/css" href="../static/vendor/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="../static/css/css.css">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.5.0/css/all.css' integrity='sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU' crossorigin='anonymous'>
+  <link rel="stylesheet" type="text/css" href="../static/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/css.css">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+  <title></title>
+  <link rel="stylesheet" href="">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
       <div class="container">
         <a class="navbar-brand" id="logo" href="#">Tutory</a>
         <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -14,14 +25,25 @@ session_start();
               <label class="progress-bar" id="lbname" name="lbname" text="lablename">Chào: <?php echo $_SESSION['login_username'];?></label>
             </li>
             <li class="nav-item ">
-              <button type="button" id="btndangnhapN" class="btn btn-primary" data-toggle="modal" data-target="#modallogin">Đăng Nhập</button>
+              <button type="button" id="btndangnhapN" class="btn btn-primary" data-toggle="modal" data-target="#modallogin"><span class="fas fa-sign-in-alt"></span>Đăng Nhập</button>
             </li>
             <li class="nav-item ">
-              <button type="button" class="btn btn-primary" id="btndangkiN" data-toggle="modal" data-target="#modalregister">Đăng Kí</button>
+              <button type="button" class="btn btn-primary" id="btndangkiN" data-toggle="modal" data-target="#modalregister"><span class="  fa fa-edit"></span>Đăng Kí</button>
             </li>
-            <li class="nav-item ">
-              <button type="button" name="btndangxuatN" id="btndangxuatN" class="btn btn-primary" >Đăng xuất</button>
-            </li>
+            
+        <li class="nav-item dropdown"id="btndangxuatN">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="layout/profile.php"><span class='fas fa-user-alt' style="margin-right: 5px"></span>Xem Thông Tin</a>
+            <a class="dropdown-item" href="layout/message.php?id_user=<?php echo $_SESSION['id_user'];?>"><span class="fas fa-comments" style="margin-right: 5px" ></span>Xem Tin Nhắn</a>
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalchangepassword"><span class="fas fa-key" style="margin-right: 5px"></span> Đổi Mật Khẩu</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="module/login/xulylogout.php"><span class="fas fa-sign-out-alt" style="margin-right: 5px"></span>Đăng Xuất</a>
+        </div>
+      </li>
+
+
             <?php
              if(!isset($_SESSION['login_username']))
              {
@@ -74,9 +96,9 @@ session_start();
           </ul>
         </div>
       </div>
-    </nav >	
+    </nav > 
   <!--Modal Login-->  
-     <div class="modal face" id="modallogin" role="login">
+  <div class="modal face" id="modallogin" role="login">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
         <div class="modal-header">
@@ -84,18 +106,48 @@ session_start();
         </div>
         <div class="modal-body">
           <div class="input-group">
-               <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-               <input id="txtL_username" type="text" class="form-control" placeholder="user name">
+                
+               <input id="txtL_username" type="text" class="form-control" placeholder="user name" required>
           </div>
           <div class="input-group">
-               <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-               <input id="txtL_password" type="password" class="form-control" placeholder="Password">
+              
+               <input id="txtL_password" type="password" class="form-control" placeholder="Password" required>
            </div>
            <p id="response" style="color:red"></p>
         </div> 
         <div class="modal-footer">
-           <button type="button" name="btndangnhap" id="btndangnhap" class="btn btn-primary">Đăng Nhập</button>
-           <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+           <button type="submit" name="btndangnhap" id="btndangnhap" class="btn btn-primary"><span class="fas fa-sign-in-alt"></span> Đăng Nhập</button>
+           <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-undo"></i>Thoát</button>
+        </div>
+     </div>
+   </div>
+ </div>
+ <!-- modal change password-->
+
+ <div class="modal face" id="modalchangepassword" role="changepassword">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title">Thay đổi mật khẩu </h4>
+        </div>
+        <div class="modal-body">
+          <div class="input-group">
+               <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+               <input id="txtC_pass" type="password" class="form-control" placeholder="mật khẩu củ...." required>
+          </div>
+          <div class="input-group">
+               <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+               <input id="txtC_passnew" type="password" class="form-control" placeholder="mật khẩu mới....">
+           </div>
+           <div class="input-group">
+               <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+               <input id="txtC_enterpassnew" type="password" class="form-control" placeholder="nhập lại mật khẩu mới.....">
+           </div>
+           <p id="C_response" style="color:red"></p>
+        </div> 
+        <div class="modal-footer">
+           <button type="submit" id="btndoimatkhau" class="btn btn-primary"><i class="fas fa-lock"></i>OK</button>
+           <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-undo"></i>Thoát</button>
         </div>
      </div>
    </div>
@@ -109,6 +161,7 @@ session_start();
       </div>
       <div class="modal-body">
          <div class="input-group">
+
             <label class="control-label col-sm-4" for="email">Tên Đăng Nhập:</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="Re_username" placeholder="UserName">
@@ -133,17 +186,14 @@ session_start();
       </div> 
      
       <div class="modal-footer">
-        <button  type="button" id="btndangki" name="btndangki"class="btn btn-primary" >Đăng Kí</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+        <button  type="button" id="btndangki" name="btndangki"class="btn btn-primary" ><i class=" fa fa-edit"></i>Đăng Kí</button>
+        <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-undo"></i>Thoát</button>
       </div>
     </div>
  </div>   
 </div>
- 
-<script
-  src="https://code.jquery.com/jquery-2.2.4.min.js"
-  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-  crossorigin="anonymous"></script>
+
+</body>
 <script src="../static/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../static/vendor/jquery/jquery.min.js"></script>
 
@@ -154,6 +204,7 @@ session_start();
     $("#btndangnhap").click(function() {
       var user= $("#txtL_username").val();
       var pass=$("#txtL_password").val();
+      
       $.post("module/login/xulylogin.php", {myusername:user, mypassword:pass}, function(data) {        
           if(data==0)
           {
@@ -168,21 +219,10 @@ session_start();
   });
 </script>
 
-<script type="text/javascript">
-  $(document).ready(function() {
-    $("#btndangxuatN").click(function() {
-        var answer = confirm("Bạn có muốn đăng xuất????");
-        if(answer)
-        {
-        location.href="module/login/xulylogout.php"; 
-        }
-    });
-  });
-
 </script>
 
 <script type="text/javascript">
-
+   
   $(document).ready(function() {
     $("#btndangki").click(function() {
       var user=$("#Re_username").val();
@@ -195,5 +235,33 @@ session_start();
     });
   });
 </script>
+<script type="text/javascript">
+  
+  $(document).ready(function() {
 
+    $("#btndoimatkhau").click(function(event) {
+      var passold= $("#txtC_pass").val();
+      var passnew=$("#txtC_passnew").val();
+      var enterpassnew =$("#txtC_enterpassnew").val();
+      if(passnew!=enterpassnew)
+      {
+        $("#C_response").html("Mật khẩu không trùng khớp");
+      }
+      else
+      {
+        $.get('module/login/doimk.php',{ollpass:passold, newpass:passnew},function(data) {
+          
+          $("#C_response").html(data);
+        });
+      }
+    });
+  });
+</script>
+
+
+</html>
+
+
+
+ 
 

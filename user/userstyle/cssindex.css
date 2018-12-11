@@ -5,3 +5,27 @@
 	text-align: center;
 	background-color:#0099FF	;
 }
+#menuprofile ul {
+  background: #8AD385;
+  width: 250px;
+  padding: 0;
+  list-style-type: none;
+  text-align: left;
+}
+#menuprofile li {
+  width: auto;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 0 1em;
+}
+#menuprofile li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  display: block;
+}
+#menuprofile li:hover {
+  background: #CDE2CD;
+}
+

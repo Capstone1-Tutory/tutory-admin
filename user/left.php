@@ -12,7 +12,7 @@
          	while ($row=mysqli_fetch_assoc($result)) 
          	{
          ?>
-         <p><a href="#"><?php echo $row["NEWS_CATEGORY_TYPE_NAME"]?></a></p>
+         <p><a href="index.php?category=<?php echo $row["NEWS_CATEGORY_TYPE_ID"]?>"><?php echo $row["NEWS_CATEGORY_TYPE_NAME"]?></a></p>
         <?php	         	
             }
          }

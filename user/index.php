@@ -12,7 +12,34 @@
 	include('header.php');
 	include('menutop.php');	
 	include('left.php');
-	include('content.php');
+	?>
+	<div class="col-sm-8 "> 
+		 <?php 
+
+
+		   
+            if(isset($_GET['page']))
+            {
+            	$page=$_GET['page'];
+            	include('layout/'.$page.'.php');
+            }
+
+            else
+            	if(isset($_GET['category']))
+            	{
+            		$page="bangtintheoloai";
+            	   include('layout/'.$page.'.php');
+            	}
+            	else
+                 {
+            	 $page="trangchu";
+		         include('layout/'.$page.'.php');
+                 }
+
+
+		 ?>
+	</div>
+	<?php
 	include('right.php');
 	include('footer.php');
 	?>
