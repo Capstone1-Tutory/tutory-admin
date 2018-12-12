@@ -1,4 +1,4 @@
-$_DOMAIN = 'http://localhost/tutory/admin/';
+$_DOMAIN = 'http://localhost/tutory-admin/admin/';
 
 // Đăng nhập
 $('#formSignin button').on('click', function () {

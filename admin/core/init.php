@@ -11,7 +11,7 @@ $db->connect();
 $db->set_char('utf8');
 
 // Thông tin chung
-$_DOMAIN = 'http://localhost/tutory/admin/';
+$_DOMAIN = 'http://localhost/tutory-admin/admin/';
 
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 $date_current = '';
