@@ -11,7 +11,7 @@
                 if ($data_user['URL_AVATAR'] == '') {
                     echo $_DOMAIN . 'images/profile.png';
                 } else {
-                    echo str_replace('admin/', '', $_DOMAIN) . $data_user['URL_AVATAR'];
+                    echo 'http://localhost/tutory-admin/' . $data_user['URL_AVATAR'];
                 }
                 ?>
                 " alt="Picture profie of <?php 

@@ -35,26 +35,6 @@ $('#formSignin button').on('click', function () {
         });
     }
 });
-// Đăng xuất
-$('#logout').on('click', function () {
-    $confirm = confirm('Bạn có muốn đăng xuất?');
-    if ($confirm == true) {
-        $.ajax({
-            url: $_DOMAIN,
-            type: 'POST',
-            data: {
-                action: 'sigout'
-            }, success: function () {
-                location.reload();
-            }, error: function () {
-                alert('Không thể đăng xuất vào lúc này, vui lòng thử lại sau.');
-            }
-        });
-    }
-    else {
-        return false;
-    }
-});
 
 // Xem ảnh avatar trước
 function preUpAvt() {
@@ -250,13 +230,13 @@ $('#formAddAcc button').on('click', function () {
 $('#del_acc_list').on('click', function () {
     $confirm = confirm('Bạn có chắc chắn muốn xoá các tài khoản đã chọn không?');
     if ($confirm == true) {
-        $ID_USER = [];
+        $id_user = [];
 
         $('#list_acc input[type="checkbox"]:checkbox:checked').each(function (i) {
-            $ID_USER[i] = $(this).val();
+            $id_user[i] = $(this).val();
         });
 
-        if ($ID_USER.length === 0) {
+        if ($id_user.length === 0) {
             alert('Vui lòng chọn ít nhất một tài khoản.');
         }
         else {
@@ -264,11 +244,11 @@ $('#del_acc_list').on('click', function () {
                 url: $_DOMAIN + 'account.php',
                 type: 'POST',
                 data: {
-                    id_user: $ID_USER,
+                    id_user: $id_user,
                     action: 'del_acc_list'
                 },
                 success: function (data) {
-                    location.reload();
+                    $('#list_schedule_in_course').html(data);
                 }, error: function () {
                     alert('Đã có lỗi xảy ra, hãy thử lại.');
                 }
@@ -283,13 +263,13 @@ $('#del_acc_list').on('click', function () {
 $('.del-acc').on('click', function () {
     $confirm = confirm('Bạn có chắc chắn muốn xoá tài khoản này không?');
     if ($confirm == true) {
-        $ID_USER = $(this).attr('data-id');
+        $id_user = $(this).attr('data-id');
 
         $.ajax({
             url: $_DOMAIN + 'account.php',
             type: 'POST',
             data: {
-                id_user: $ID_USER,
+                id_user: $id_user,
                 action: 'del_acc'
             },
             success: function () {
@@ -309,5 +289,64 @@ $(document).ready(function () {
     })
 });
 
+// duyệt bài viết
+$('#review_topic').on('click', function () {
+    $confirm = confirm('Bạn có muốn duyệt bài viết này không?');
+    if ($confirm == true) {
+        $news_id = $(this).attr('data-id');
+        $.ajax({
+            url: $_DOMAIN + 'topic.php',
+            type: 'POST',
+            data: {
+                news_id: $news_id,
+                action: 'review_topic'
+            },
+            success: function () {
+                location.reload();
+            }, error: function () {
+                alert('Không thể duyệt vào lúc này, vui lòng thử lại sau.');
+            }
+        });
+    }
+    else {
+        return false;
+    }
+});
 
+// duyệt khóa học
+$('#review_course').on('click', function () {
+    $confirm = confirm('Bạn có muốn duyệt khóa học này không?');
+    if ($confirm == true) {
+        $id_course = $(this).attr('data-id');
+        $.ajax({
+            url: $_DOMAIN + 'course.php',
+            type: 'POST',
+            data: {
+                id_course: $id_course,
+                action: 'review_course'
+            },
+            success: function () {
+                location.reload();
+            }, error: function () {
+                alert('Không thể duyệt vào lúc này, vui lòng thử lại sau.');
+            }
+        });
+    }
+    else {
+        return false;
+    }
+});
+
+// chi tiết khóa học
+$('.course_detail').on('click', function () {
+    $id_course = $(this).attr('data-id');
+    $.ajax({
+        url: $_DOMAIN + 'course.php',
+        type: 'POST',
+        data: {
+            id_course: $id_course,
+            action: 'list_schedule_in_course'
+        }
+    });
+});
 

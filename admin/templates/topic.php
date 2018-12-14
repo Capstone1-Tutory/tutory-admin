@@ -58,11 +58,11 @@ if ($user) {
             </form>
         ';
         // Content danh sách bài viết
-        $sql_get_topic = "SELECT * FROM news_category_type NCT, news_categories_of_new NCON, news N,
-                                                                                                        , editor_of_news EON, editor E
+        $sql_get_topic = "SELECT * FROM news_category_type NCT, news_categories_of_new NCON, news N
+                                                                                                      
         WHERE NCT.NEWS_CATEGORY_TYPE_ID = NCON.NEWS_CATEGORY_TYPE_ID
         AND NCON.NEWS_ID = N.NEWS_ID
-        AND N.NEWS_ID = 
+        
         ";
         if ($db->num_rows($sql_get_topic)) {
             echo '
@@ -79,27 +79,31 @@ if ($user) {
                 </tr>
             ';
             foreach ($db->fetch_assoc($sql_get_topic, 0) as $key => $data_topic) {
-                if ($data_topic['STATUS'] = '0') {
-                    $stt_topic = '<a id="review_topic">Chưa duyệt</a>';
-                } else if ($data_topic['STATUS'] = '1') {
+                if ($data_topic['STATUS'] == 0) {
+                    $stt_topic = ' 
+                    <a data-id="' . $data_topic['NEWS_ID'] . '" class="label label-warning" id="review_topic">
+                    <span class="glyphicon glyphicon-ok"></span> Chưa duyệt</a>
+                    ';
+                } else if ($data_topic['STATUS'] == 1) {
                     $stt_topic = '<label class="label label-primary">Đã duyệt</label>';
-                } else if ($data_topic['STATUS'] = '2') {
+                } else if ($data_topic['STATUS'] == 2) {
                     $stt_topic = '<label class="label label-default">Đã hủy</label>';
                 }
                 echo
                     '
-                    
                     <tr>
                     <th><input type="checkbox" name="NEWS_ID[]" value="' . $data_topic['NEWS_ID'] . '"></th>
                     <th>' . $data_topic['NEWS_TITLE'] . '</th>
-                    <th>' . $data_topic['DETAILS'] . '</th>
-                    <th>' . $data_topic[''] . '</th>
-                    <th>' . $data_topic[''] . '</th>
+                    <th>' . $data_topic['NEWS_ID'] . '</th>
+                    <th>' . $data_topic['NEWS_TITLE'] . '</th>
+                    <th>' . $data_topic['NEWS_TITLE'] . '</th>
                     <th>' . $stt_topic . '</th>
                     </tr>
                     ';
             }
-            echo '</table>';
+            echo '</table>
+                    </div>
+            ';
 
         } else {
             echo '<br><br><div class="alert alert-info">Không có bài viết nào trong hệ thống.</div>';

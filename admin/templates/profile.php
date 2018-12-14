@@ -6,7 +6,8 @@ if ($user) {
     if ($data_user['URL_AVATAR'] == '') {
         $data_user['URL_AVATAR'] = $_DOMAIN . 'images/profile.png';
     } else {
-        $data_user['URL_AVATAR'] = str_replace('admin/', '', $_DOMAIN) . $data_user['URL_AVATAR'];
+        //link đường dẫn hình ảnh
+        $data_user['URL_AVATAR'] = 'http://localhost/tutory-admin/' . $data_user['URL_AVATAR'];
     }
     // Form thông tin chung
     // lấy địa chỉ user

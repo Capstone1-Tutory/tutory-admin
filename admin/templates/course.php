@@ -131,7 +131,6 @@ if ($user) {
                 ';
 
             }
-
         }
         // Ngược lại không có tham số ac
         // Trang danh sách khóa học
@@ -191,8 +190,9 @@ if ($user) {
                     $count_student = $db->num_rows("SELECT ID_STUDENT FROM student_rela_course WHERE ID_COURSE = $data_course[ID_COURSE]");          
                     //trạng thái khóa học
                     if ($data_course['COURSE_STATUS'] == 0) {
-                        $stt_course = '<a id="review_course">Chưa duyệt</a>';
-
+                        $stt_course = '
+                        <a data-id="' . $data_course['ID_COURSE'] . '" class="label label-warning" id="review_course">
+                        <span class="glyphicon glyphicon-ok"></span> Chưa duyệt</a>';
                     } else if ($data_course['COURSE_STATUS'] == 2) {
                         $stt_course = '<label class="label label-danger">Đã hủy</label>';
                     } else if ($data_course['COURSE_STATUS'] == 1) {
@@ -205,20 +205,12 @@ if ($user) {
                             $stt_course = '<label class="label label-info">Đang diễn ra</label>';
                         }
                     }
-
-
                     echo
                         '
-                    
                     <tr>
                     <th><input type="checkbox" name="ID_COURSE[]" value="' . $data_course['ID_COURSE'] . '"></th>
-                    <th><button data-toggle="modal" data-target="#modal_course_detail" 
-                    value="' . $data_course['ID_COURSE'] . '"  id="course_detail">
-                        <span class="glyphicon glyphicon-zoom-in"></span></button>
-                    ';
-                    
-                    // in ra dữ liệu của khóa học
-                    echo '
+                    <th><a data-id="' . $data_course['ID_COURSE'] . '"  class="course_detail" data-toggle="modal" data-target="#list_schedule_in_course">
+                        <span class="glyphicon glyphicon-zoom-in"></span></a>
                     </th>
                     <th>' . $data_course['NAME'] . '</th>
                     <th>' . $data_course['JOB'] . '</th>
@@ -232,74 +224,9 @@ if ($user) {
                     ';
                 }
                 echo '</table>';
-                
-                // lấy chi tiết khóa học từ bảng thời khóa biểu
-                $sql_get_list_schedule = "SELECT * FROM schedule WHERE ID_COURSE = $data_course[ID_COURSE]";
-                if ($db->num_rows($sql_get_list_schedule)) {
-
-
-                    echo
-                        '
-                            
-                            <!-- Chi tiết khóa học --!>
-                                <div id="modal_course_detail" class="modal fade" role="dialog">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    <h4 class="modal-title"><strong>Chi tiết khóa học</strong></h4>                                           
-                                                <div class="table-responsive">
-                                                        <table class="table table-hover list" id="course_detail">
-                                                        <tr>
-                                                        <th><strong>Ngày</strong></th>
-                                                        <th><strong>Giờ bắt đầu</strong></th>
-                                                        <th><strong>Giờ kết thúc</strong></th>                  
-                                                        <th><strong>Địa điểm</strong></th>
-                                                        <th><strong>Tình trạng</strong></th>
-                                                        </tr>
-                                                        
-                                                        
-                            ';
-
-
-                    foreach ($db->fetch_assoc($sql_get_list_schedule, 0) as $key => $data_schedule) {
-                        if ($data_schedule['SCHEDULE_STATUS'] == 0) {
-                            $stt_schedule = '<label class="label label-warning">Đang diễn ra</label>';
-                        } else if ($data_schedule['SCHEDULE_STATUS'] == 1) {
-                            $stt_schedule = '<label class="label label-info">Đang hoạt động</label>';
-                        } else if ($data_schedule['SCHEDULE_STATUS'] == 2) {
-                            $stt_schedule = '<label class="label label-default">Đã kết thúc</label>';
-                        } else if ($data_schedule['SCHEDULE_STATUS'] == 3) {
-                            $stt_schedule = '<label class="label label-danger">Đã hủy</label>';
-                        }
-                        // in ra dữ liệu
-                        echo '
-                                        <tr>
-                                            <th>' . $data_schedule['SCHEDULE_DATE'] . '</th>
-                                            <th>' . $data_schedule['SCHEDULE_START_TIME'] . ' giờ</th>
-                                            <th>' . $data_schedule['SCHEDULE_END_TIME'] . ' giờ</th>                  
-                                             <th>' . $data_schedule['PLACE'] . '</th>
-                                            <th>' . $stt_schedule . '</th>
-                                        </tr>
-                                    ';
-                        echo '
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    ';
-
-
-                    }
-                }
-
                 echo '
                     </div>
                 ';
-
-
             }
                 // Nếu không có khóa học
             else {
