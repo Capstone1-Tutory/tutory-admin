@@ -148,10 +148,8 @@ if ($user) {
             </a>
             <a class="btn btn-danger" id="del_course_list">
             <span class="glyphicon glyphicon-trash"></span> Xóa
-            </a>              
-            <input class="form-control mr-sm-2" type="search" placeholder="Nhập từ khóa .." aria-label="Search">
-            <button class="btn btn-success my-2 my-sm-0" type="submit">Tìm kiếm</button>
-            </form>
+            </a>
+         </form> 
             ';
 
 
@@ -164,13 +162,25 @@ if ($user) {
             ORDER BY COURSE_START_DATE ASC";
            //nếu có khóa học
             if ($db->num_rows($sql_get_list_course)) {
+                // form tìm kiếm khóa học
+                echo '
+                <p>
+                <form method="POST" id="formSearchCourse" onsubmit="return false;">
+                    <div class="input-group">         
+                        <input type="text" class="form-control" id="kw_search_course" placeholder="Nhập từ khóa ...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </span>
+                    </div>
+                </form>
+                </p>
+                ';
                 echo
                     '
-                <br><br>
-                <div class="table-responsive">
-                <table class="table table-hover list" id="list_course">
+                <div class="table-responsive"  id="list_course">
+                <table class="table table-hover list">
                 <tr>
-                <th><input type="checkbox" id="selectAll"></th>
+                <th><input type="checkbox" id="selectAllCourse"></th>
                 <th></th>
                 <th><strong>Tên gia sư</strong></th>
                 <th><strong>Nghề nghiệp</strong></th>
@@ -209,8 +219,8 @@ if ($user) {
                         '
                     <tr>
                     <th><input type="checkbox" name="ID_COURSE[]" value="' . $data_course['ID_COURSE'] . '"></th>
-                    <th><a data-id="' . $data_course['ID_COURSE'] . '"  class="course_detail" data-toggle="modal" data-target="#list_schedule_in_course">
-                        <span class="glyphicon glyphicon-zoom-in"></span></a>
+                    <th><button data-id="' . $data_course['ID_COURSE'] . '"  id="course_detail" type="submit">
+                        <i class="glyphicon glyphicon-zoom-in"></i></button>
                     </th>
                     <th>' . $data_course['NAME'] . '</th>
                     <th>' . $data_course['JOB'] . '</th>
@@ -246,7 +256,7 @@ else {
 
 ?>
 <script type="text/javascript">
-    $('#selectAll').click(function(e){
+    $('#selectAllCourse').click(function(e){
         var table= $(e.target).closest('table');
         $('th input:checkbox',table).prop('checked',this.checked);
     });

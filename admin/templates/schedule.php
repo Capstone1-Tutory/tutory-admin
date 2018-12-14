@@ -65,9 +65,8 @@ if ($user) {
             if ($db->num_rows($sql_get_schedule_in_date_current)) {
                 echo
                     '
-                        <br><br>
-                        <div class="table-responsive">
-                        <table class="table table-hover list" id="list_schedule">
+                        <div class="table-responsive"  id="list_schedule">
+                        <table class="table table-hover list">
                         <tr>
                         <th><strong>Thời gian</strong></th>
                         <th><strong>Địa điểm</strong></th>                  

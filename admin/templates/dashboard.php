@@ -111,3 +111,57 @@ echo
   ';
 ?>
 </div>
+
+<h3>Bài viết</h3><hr>
+<div class="row">
+<?php
+// lấy tổng bài viết
+$sql_total_topic = "SELECT * FROM news";
+$count_total = $db->num_rows($sql_total_topic);
+echo
+  '
+  <div class="col-md-3">
+  <div class="alert alert-success">
+  <h1>' . $count_total . '</h1>
+  <p><i>Tổng số bài viết</i></p>
+  </div>
+  </div>
+  ';
+//lấy bài viết đẫ duyệt
+$sql_get_topic = "SELECT * FROM news WHERE STATUS = '1'";
+$count_topic = $db->num_rows($sql_get_topic);
+echo
+  '
+  <div class="col-md-3">
+  <div class="alert alert-info">
+  <h1>' . $count_topic . '</h1>
+  <p><i>Bài viết đã duyệt</i></p>
+  </div>
+  </div>
+  ';
+  //lấy bài viết chưa duyệt
+$sql_review_topic = "SELECT * FROM news WHERE STATUS = '0'";
+$count_review_topic = $db->num_rows($sql_review_topic);
+echo
+  '
+  <div class="col-md-3">
+  <div class="alert alert-warning">
+  <h1>' . $count_review_topic . '</h1>
+  <p><i>Bài viết đợi duyệt</i></p>
+  </div>
+  </div>
+  ';
+  // lấy bài viết đã hủy
+$sql_cancel_topic = "SELECT * FROM news WHERE STATUS = '2'";
+$count_cancel_topic = $db->num_rows($sql_cancel_topic);
+echo
+  '
+  <div class="col-md-3">
+  <div class="alert alert-danger">
+  <h1>' . $count_cancel_topic . '</h1>
+  <p><i>Bài viết đã hủy</i></p>
+  </div>
+  </div>
+  ';
+?>
+</div>

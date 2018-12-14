@@ -90,9 +90,7 @@ if ($user) {
             <a class="btn btn-danger" id="del_acc_list">
             <span class="glyphicon glyphicon-trash"></span> Xóa
             </a>              
-            <input class="form-control mr-sm-2" type="search" placeholder="Nhập từ khóa .." aria-label="Search">
-            <button class="btn btn-success my-2 my-sm-0" type="submit">Tìm kiếm</button>
-            </form>
+            </form>     
             ';
 
             // Content danh sách tài khoản
@@ -102,13 +100,25 @@ if ($user) {
 
             // Nếu có tài khoản
             if ($db->num_rows($sql_get_list_acc)) {
+                //tìm kiếm tài khoản
+                echo '
+                <p>
+                <form method="POST" id="formSearchAcc" onsubmit="return false;">
+                    <div class="input-group">         
+                        <input type="text" class="form-control" id="kw_search_acc" placeholder="Nhập từ khóa ...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </span>
+                    </div>
+                </form>
+                </p>
+                ';
                 echo
                     '
-                <br><br>
-                <div class="table-responsive">
-                <table class="table table-hover list" id="list_acc">
+                <div class="table-responsive" id="list_acc">
+                <table class="table table-hover list">
                 <tr>
-                <th><input type="checkbox" id="selectAll"></th>
+                <th><input type="checkbox" id="selectAllAccount"></th>
                 <th><strong>Tên tài khoản</strong></th>
                 <th><strong>Địa chỉ Email</strong></th>
                 <th><strong>Vai trò</strong></th>                  
@@ -121,7 +131,7 @@ if ($user) {
 
                     if ($data_acc['ID_TYPE'] == 'ad') {
                         $role_acc = '<label class="label label-primary">Quản trị viên</label>';
-                    } else if ($data_acc['ID_TYPE'] == 'user') {
+                    } else {
                         if ($db->num_rows("SELECT ID_PROFILE FROM tutor WHERE ID_PROFILE = $data_acc[ID_PROFILE]")) {
                             $role_acc = '<label class="label label-warning">Gia sư</label>';
                         } else if ($db->num_rows("SELECT ID_PROFILE FROM student WHERE ID_PROFILE = $data_acc[ID_PROFILE]")) {
@@ -178,7 +188,7 @@ else {
 
 ?>
 <script type="text/javascript">
-    $('#selectAll').click(function(e){
+    $('#selectAllAccount').click(function(e){
         var table= $(e.target).closest('table');
         $('th input:checkbox',table).prop('checked',this.checked);
     });

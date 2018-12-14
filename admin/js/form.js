@@ -303,6 +303,7 @@ $('#review_topic').on('click', function () {
             },
             success: function () {
                 location.reload();
+                alert('Duyệt thành công.');
             }, error: function () {
                 alert('Không thể duyệt vào lúc này, vui lòng thử lại sau.');
             }
@@ -327,6 +328,7 @@ $('#review_course').on('click', function () {
             },
             success: function () {
                 location.reload();
+                alert('Duyệt thành công.');
             }, error: function () {
                 alert('Không thể duyệt vào lúc này, vui lòng thử lại sau.');
             }
@@ -338,15 +340,63 @@ $('#review_course').on('click', function () {
 });
 
 // chi tiết khóa học
-$('.course_detail').on('click', function () {
+$('#course_detail').on('click', function () {
     $id_course = $(this).attr('data-id');
     $.ajax({
         url: $_DOMAIN + 'course.php',
         type: 'POST',
         data: {
             id_course: $id_course,
-            action: 'list_schedule_in_course'
+            action: 'detail_course'
+        }, success: function (data) {
+            $('#list_course').html(data);
         }
     });
 });
 
+// tìm kiếm 
+$('#formSearchCourse button').on('click', function () {
+    $kw_search_course = $('#kw_search_course').val();
+    if ($kw_search_course != '') {
+        $.ajax({
+            url: $_DOMAIN + 'course.php',
+            type: 'POST',
+            data: {
+                kw_search_course: $kw_search_course,
+                action: 'search_course'
+            }, success: function (data) {
+                $('#list_course').html(data);
+            }
+        });
+    }
+});
+$('#formSearchAcc button').on('click', function () {
+    $kw_search_acc = $('#kw_search_acc').val();
+    if ($kw_search_acc != '') {
+        $.ajax({
+            url: $_DOMAIN + 'account.php',
+            type: 'POST',
+            data: {
+                kw_search_acc: $kw_search_acc,
+                action: 'search_acc'
+            }, success: function (data) {
+                $('#list_acc').html(data);
+            }
+        });
+    }
+});
+$('#formSearchTopic button').on('click', function () {
+    $kw_search_topic = $('#kw_search_topic').val();
+    if ($kw_search_topic != '') {
+        $.ajax({
+            url: $_DOMAIN + 'topic.php',
+            type: 'POST',
+            data: {
+                kw_search_topic: $kw_search_topic,
+                action: 'search_topic'
+            }, success: function (data) {
+                $('#list_topic').html(data);
+            }
+        });
+    }
+});

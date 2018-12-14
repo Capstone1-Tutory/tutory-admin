@@ -53,27 +53,39 @@ if ($user) {
             <a class="btn btn-danger" id="del_topic_list">
                 <span class="glyphicon glyphicon-trash"></span> Xoá
             </a> 
-            <input class="form-control mr-sm-2" type="search" placeholder="Nhập từ khóa .." aria-label="Search">
-            <button class="btn btn-success my-2 my-sm-0" type="submit">Tìm kiếm</button>
-            </form>
+            </form>          
         ';
         // Content danh sách bài viết
-        $sql_get_topic = "SELECT * FROM news_category_type NCT, news_categories_of_new NCON, news N
-                                                                                                      
+        $sql_get_topic = "SELECT * FROM news_category_type NCT, news_categories_of_new NCON, news N, editor_of_news EON                                                                                  
         WHERE NCT.NEWS_CATEGORY_TYPE_ID = NCON.NEWS_CATEGORY_TYPE_ID
         AND NCON.NEWS_ID = N.NEWS_ID
-        
+        AND N.NEWS_ID = EON.THING_ROLE_TYPE_ID_TO
+        ORDER BY EON.FROM_DATE ASC
         ";
+
         if ($db->num_rows($sql_get_topic)) {
+            //tìm kiếm bài viết
             echo '
-            <br><br>
-                <div class="table-responsive">
-                <table class="table table-hover list" id="list_topic">
+            <p>
+                <form method="POST" id="formSearchTopic" onsubmit="return false;">
+                    <div class="input-group">         
+                        <input type="text" class="form-control" id="kw_search_topic" placeholder="Nhập từ khóa ...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </span>
+                    </div>
+                </form>
+            </p>  
+            ';
+            echo '
+                <div class="table-responsive"  id="list_topic">
+                <table class="table table-hover list">
                 <tr>
                 <th><input type="checkbox" id="selectAllTopic"></th>
                 <th><strong>Đề tài</strong></th>
-                <th><strong>Mô tả</strong></th>
+                <th><strong>Lĩnh vực</strong></th>
                 <th><strong>Tác giả</strong></th>
+                <th><strong>Vài trò</strong></th>
                 <th><strong>Ngày viết</strong></th>                 
                 <th><strong>Trạng thái</strong></th>
                 </tr>
@@ -89,14 +101,35 @@ if ($user) {
                 } else if ($data_topic['STATUS'] == 2) {
                     $stt_topic = '<label class="label label-default">Đã hủy</label>';
                 }
+                $sql_get_editor = "SELECT * FROM editor E, user_account UA, user_profile UP, type_user TU
+                    WHERE $data_topic[PARTY_ROLE_TYPE_ID_FROM] = E.PARTY_ID
+                    AND E.ID_USER = UA.ID_USER
+                    AND UA.ID_USER = UP.ID_USER
+                    AND UA.ID_TYPE = TU.ID_TYPE
+                    ";
+                foreach ($db->fetch_assoc($sql_get_editor, 0) as $key => $data_editor) {
+
+                }
+                if ($data_editor['ID_TYPE'] == 'ad') {
+                    $role_acc = '<label class="label label-primary">Quản trị viên</label>';
+                } else {
+                    if ($db->num_rows("SELECT ID_PROFILE FROM tutor WHERE ID_PROFILE = $data_editor[ID_PROFILE]")) {
+                        $role_acc = '<label class="label label-warning">Gia sư</label>';
+                    } else if ($db->num_rows("SELECT ID_PROFILE FROM student WHERE ID_PROFILE = $data_editor[ID_PROFILE]")) {
+                        $role_acc = '<label class="label label-info">Học viên</label>';
+                    } else {
+                        $role_acc = '<label class="label label-default">Người dùng</label>';
+                    }
+                }
                 echo
                     '
                     <tr>
                     <th><input type="checkbox" name="NEWS_ID[]" value="' . $data_topic['NEWS_ID'] . '"></th>
                     <th>' . $data_topic['NEWS_TITLE'] . '</th>
-                    <th>' . $data_topic['NEWS_ID'] . '</th>
-                    <th>' . $data_topic['NEWS_TITLE'] . '</th>
-                    <th>' . $data_topic['NEWS_TITLE'] . '</th>
+                    <th>' . $data_topic['NEWS_CATEGORY_TYPE_NAME'] . '</th>
+                    <th>' . $data_editor['NAME'] . '</th>
+                    <th>' . $role_acc . '</th>
+                    <th>' . $data_topic['FROM_DATE'] . '</th>
                     <th>' . $stt_topic . '</th>
                     </tr>
                     ';
@@ -117,3 +150,12 @@ else {
 }
 
 ?>
+
+<script type="text/javascript">
+    $('#selectAllTopic').click(function(e){
+        var table= $(e.target).closest('table');
+        $('th input:checkbox',table).prop('checked',this.checked);
+    });
+// Print selected rows
+
+</script>
