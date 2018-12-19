@@ -43,7 +43,7 @@ if ($user) {
                 <select class="form-control title" id="major_add_course">
                 <option>Vui lòng chọn chuyện ngành</option>
                 ';
-                $sql_get_major = "SELECT * FROM major M
+                $sql_get_major = "SELECT * FROM major
                     ";
                 if ($db->num_rows($sql_get_major)) {
                     foreach ($db->fetch_assoc($sql_get_major, 0) as $key => $data_major) {
@@ -59,70 +59,76 @@ if ($user) {
                 <label>Tên gia sư</label>
                 <select class="form-control title" id="tutor_add_course">
                 <option>Vui lòng chọn gia sư</option>
-              
+                    
                 </select>
                 </div>
                 <div class="form-group">
                 <label>Địa điểm</label>
                 <div class="form-inline">
-                    <select class="form-control title" id="tinh">
+                    <select class="form-control title" id="city_add_course" style="width:324px">
                     <option value="">Tỉnh/Thành phố</option>
+                    ';
+                $sql_get_city = "SELECT * FROM devvn_tinhthanhpho
+                    ";
+                if ($db->num_rows($sql_get_city)) {
+                    foreach ($db->fetch_assoc($sql_get_city, 0) as $key => $data_city) {
+                        echo '
+                                <option value="' . $data_city['matp'] . '">' . $data_city['name'] . '</option>
+                            ';
+                    }
+                }
+                echo '
                     </select>
-                    <select class="form-control title" id="huyen">
+                    <select class="form-control title" id="district_add_course" style="width:324px">
                     <option value="">Quận/Huyện</option>
                     </select>
-                    <select class="form-control title" id="xa">
+                    <select class="form-control title" id="commune_add_course" style="width:324px">
                     <option value="">Xã/Phường</option>
                     </select>
                 </div>
                 </div>
                 <div class="form-group">
-                <input type="text" class="form-control title" id="street" placeholder="Nhập tên đường ..">
+                <input type="text" class="form-control title" id="street_add_course" placeholder="Nhập tên đường ..">
                 </div>
                 <div class="form-group">
                 <label>Số lượng học viên</label>
-                <select class="form-control title" id="quantity_add_course">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
+                <input type="text" class="form-control title" id="quantity_add_course">
                 </div>
                 <div class="form-group">
-                <label>Chọn ngày:</label>
-                <label> Từ</label>
-                <input type="date" class="form-control-inline title" id="start_day_add_course">
-                
-                <label> Đến</label>
-                
-                <input type="date" class="form-control-inline title" id="end_day_add_course">
+                <label>Chọn thời gian</label>
+                <div class="form-inline">
+                <label>Từ ngày</label>
+                <input type="date" class="form-control title" id="startdate_add_course" style="width:425px">
+                <label>Đến ngày</label>
+                <input type="date" class="form-control title" id="enddate_add_course" style="width:425px">
                 </div>
-                <div class="form-group">
+                </div>
+                <div class="form-group" id="dayweek_add_course">
                 <label>Chọn thứ trong tuần: </label>
-                <label class="radio-inline"><input type="radio" id="monday" value="1">Thứ hai</label>
-                <label class="radio-inline"><input type="radio" id="tuesday" value="2">Thứ ba</label>
-                <label class="radio-inline"><input type="radio" id="wednesday" value="3">Thứ tư</label>
-                <label class="radio-inline"><input type="radio" id="thursday" value="4">Thứ năm</label>
-                <label class="radio-inline"><input type="radio" id="friday" value="5">Thứ sáu</label>
-                <label class="radio-inline"><input type="radio" id="saturday" value="6">Thứ bảy</label>
-                <label class="radio-inline"><input type="radio" id="sunday" value="0">Chủ nhật</label>
+                <label class="radio-inline"><input type="radio" name="day" value="1">Thứ hai</label>
+                <label class="radio-inline"><input type="radio" name="day" value="2">Thứ ba</label>
+                <label class="radio-inline"><input type="radio" name="day" value="3">Thứ tư</label>
+                <label class="radio-inline"><input type="radio" name="day" value="4">Thứ năm</label>
+                <label class="radio-inline"><input type="radio" name="day" value="5">Thứ sáu</label>
+                <label class="radio-inline"><input type="radio" name="day" value="6">Thứ bảy</label>
+                <label class="radio-inline"><input type="radio" name="day" value="0">Chủ nhật</label>
                 </div>
                 
                 <div class="form-group">
-                <label>Chọn khung giờ:</label>
-                <label> Từ</label>
-                <input type="time" class="form-control-inline title" id="start_time_add_course">
-                <label> Đến</label>
-                <input type="time" class="form-control-inline title" id="end_time_add_course">
+                <label>Chọn khung giờ</label>
+                <div class="form-inline">
+                <label>Giờ bắt đầu</label>
+                <input type="text" class="form-control title" id="starttime_add_course" style="width:403px" placeholder="Nhập giờ theo định dạng 24 tiếng">
+                <label>Giờ kết thúc</label>
+                <input type="text" class="form-control title" id="endtime_add_course" style="width:403px" placeholder="Nhập giờ theo định dạng 24 tiếng">
+                </div>
                 </div>
                 <div class="form-group">
                 <div class="form-inline">
                 <a href="' . $_DOMAIN . 'course" class="btn btn-default" style="color:red">
                 <span class="glyphicon glyphicon-arrow-left" style="color:red"></span> Hủy
                 </a>
-                
-                <a class="btn btn-primary">Xác nhận</a> 
+                <button type="submit" class="btn btn-primary">Thêm</button>
                 </div>
                 </div>
                 <div class="alert alert-danger hidden"></div>
@@ -208,11 +214,17 @@ if ($user) {
                     } else if ($data_course['COURSE_STATUS'] == 1) {
                         $today = date("Y-m-d");
                         if (strtotime($data_course['COURSE_START_DATE']) > strtotime($today)) {
-                            $stt_course = '<label class="label label-warning">Sắp diễn ra</label>';
+                            $stt_course = '<label class="label label-warning">Sắp diễn ra</label>
+                            <a data-id="' . $data_course['ID_COURSE'] . '" class="label label-danger" id="cancel_course">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Hủy</a>
+                            ';
                         } else if (strtotime($data_course['COURSE_END_DATE']) < strtotime($today)) {
                             $stt_course = '<label class="label label-default">Đã kết thúc</label>';
                         } else {
-                            $stt_course = '<label class="label label-info">Đang diễn ra</label>';
+                            $stt_course = '<label class="label label-info">Đang diễn ra</label>
+                            <a data-id="' . $data_course['ID_COURSE'] . '" class="label label-danger" id="cancel_course">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Hủy</a>
+                            ';
                         }
                     }
                     echo

@@ -21,13 +21,73 @@ if ($user) {
                 foreach ($db->fetch_assoc($sql_name_tutor, 0) as $key => $name_tutor)
 
                     echo '
-                        <option value="' . $name_tutor['ID_TUTOR'] . '">' . $name_tutor['NAME'] . '></option>
+                        <option value="' . $name_tutor['ID_TUTOR'] . '">' . $name_tutor['NAME'] . '</option>
+                        ';
+            }
+        } 
+        // load huyện
+        else if ($action == 'load_city') {
+            // Xử lý giá trị
+            $matp = trim(addslashes(htmlspecialchars($_POST['matp'])));
+            $sql_name_district = "SELECT * FROM devvn_quanhuyen
+                WHERE matp = '$matp'
+                ";
+            if ($db->num_rows($sql_name_district)) {
+                foreach ($db->fetch_assoc($sql_name_district, 0) as $key => $name_district)
+
+                    echo '
+                        <option value="' . $name_district['maqh'] . '">' . $name_district['name'] . '</option>
+                        ';
+            }
+        } 
+        // load xã
+        else if ($action == 'load_district') {
+            // Xử lý giá trị
+            $maqh = trim(addslashes(htmlspecialchars($_POST['maqh'])));
+            $sql_name_commune = "SELECT * FROM devvn_xaphuongthitran
+                WHERE maqh = '$maqh'
+                ";
+            if ($db->num_rows($sql_name_commune)) {
+                foreach ($db->fetch_assoc($sql_name_commune, 0) as $key => $name_commune)
+
+                    echo '
+                        <option value="' . $name_commune['xaid'] . '">' . $name_commune['name'] . '</option>
                         ';
             }
         }
         // Thêm khóa học
         else if ($action == 'add_course') {
+            $major_add_course = trim(htmlspecialchars(addslashes($_POST['major_add_course'])));
+            $tutor_add_course = trim(htmlspecialchars(addslashes($_POST['tutor_add_course'])));
+            $street_add_course = trim(htmlspecialchars(addslashes($_POST['street_add_course'])));
+            $quantity_add_course = trim(htmlspecialchars(addslashes($_POST['quantitty_add_course'])));
+            $startdate_add_course = trim(htmlspecialchars(addslashes($_POST['startdate_add_course'])));
+            $enddate_add_course = trim(htmlspecialchars(addslashes($_POST['enddate_add_course'])));
+            //$dayweek_add_course = trim(htmlspecialchars(addslashes($_POST['dayweek_add_course'])));
+            $starttime_add_course = trim(htmlspecialchars(addslashes($_POST['starttime_add_course'])));
+            $endtime_add_course = trim(htmlspecialchars(addslashes($_POST['endtime_add_course'])));
+             // Các biến xử lý thông báo
+            $show_alert = '<script>$("#formAddCourse .alert").removeClass("hidden");</script>';
+            $hide_alert = '<script>$("#formAddCourse .alert").addClass("hidden");</script>';
+            $success = '<script>$("#formAddCourse .alert").attr("class", "alert alert-success");</script>';
+            // nếu gia sư đó chưa từng dạy lớp nào
+            $sql_check_tutor = "SELECT ID_TUTOR FROM course";
+            if ($db->query($sql_check_tutor) != $tutor_add_course) {
+                $sql_add_course = "INSERT INTO course VALUES(
+                    '',
+                    '$tutor_add_course',
+                    '0',
+                    '$startdate_add_course',
+                    '$enddate_add_course',
+                    '$quantity_add_course',
+                    '$major_add_course'
+                )";
+                $db->query($sql_add_course);
 
+                $db->close();
+                echo $show_alert . $success . 'Thêm khóa học thành công.';
+                new Redirect($_DOMAIN . 'course'); // Trở về trang danh sách tài khoản
+            }
         } 
         // duyệt khóa học
         else if ($action == 'review_course') {
@@ -45,8 +105,15 @@ if ($user) {
             $sql_get_list_schedule = "SELECT * FROM schedule WHERE ID_COURSE = '$id_course'";
             if ($db->num_rows($sql_get_list_schedule)) {
                 echo
-                    '       
-                            <h3>Chi tiết khóa học</h3>
+                    ' 
+                    <div class="form-group">
+                    <div class="form-inline">
+                    <a href="' . $_DOMAIN . 'course" class="btn btn-default" style="color:red">
+                    <span class="glyphicon glyphicon-arrow-left" style="color:red"></span> Trở về
+                    </a>
+                    <label>Chi tiết khóa học</label>
+                    </div>
+                    </div>
                                                         <table class="table table-hover list">
                                                         <tr>
                                                         <th><strong>Ngày</strong></th>
@@ -59,12 +126,20 @@ if ($user) {
                 // lấy chi tiết khóa học từ bảng thời khóa biểu
                 foreach ($db->fetch_assoc($sql_get_list_schedule, 0) as $key => $data_schedule) {
                     if ($data_schedule['SCHEDULE_STATUS'] == 0) {
-                        $stt_schedule = '<label class="label label-warning">Đang diễn ra</label>';
+                        if ($data_schedule['SCHEDULE_DATE'] == getdate()) {
+                            if ($data_schedule['SCHEDULE_START_TIME'] > getdate(['hours'])) {
+                                $stt_schedule = '<label class="label label-warning">Sắp diễn ra</label>';
+                            } else if ($data_schedule['SCHEDULE_END_TIME'] < getdate(['hours'])) {
+                                $stt_schedule = '<label class="label label-default">Đã kết thúc</label>';
+                            } else {
+                                $stt_schedule = '<label class="label label-info">Đang diễn ra</label>';
+                            }
+                        } else if ($data_schedule['SCHEDULE_DATE'] > getdate()) {
+                            $stt_schedule = '<label class="label label-warning">Sắp diễn ra</label>';
+                        } else {
+                            $stt_schedule = '<label class="label label-default">Đã kết thúc</label>';
+                        }
                     } else if ($data_schedule['SCHEDULE_STATUS'] == 1) {
-                        $stt_schedule = '<label class="label label-info">Đang hoạt động</label>';
-                    } else if ($data_schedule['SCHEDULE_STATUS'] == 2) {
-                        $stt_schedule = '<label class="label label-default">Đã kết thúc</label>';
-                    } else if ($data_schedule['SCHEDULE_STATUS'] == 3) {
                         $stt_schedule = '<label class="label label-danger">Đã hủy</label>';
                     }
                         // in ra dữ liệu
@@ -76,9 +151,9 @@ if ($user) {
                                             <th>' . $data_schedule['PLACE'] . '</th>
                                             <th>' . $stt_schedule . '</th>
                                         </tr>
-                                        </table>
                                     ';
                 }
+                echo '</table>';
             } else {
                 echo '<br><br><div class="alert alert-info">Chưa có lịch học cho khóa học này.</div>';
             }
@@ -92,10 +167,10 @@ if ($user) {
                 AND T.ID_PROFILE = UP.ID_PROFILE
                 AND TRM.ID_TUTOR = T.ID_TUTOR
                 AND TRM.ID_MAJOR = M.ID_MAJOR
-                AND UP.NAME LIKE '%$kw_search_course%'
+                AND (UP.NAME LIKE '%$kw_search_course%'
                 OR M.MAJOR_NAME LIKE '%$kw_search_course%'
                 OR C.COURSE_START_DATE LIKE '%$kw_search_course%'
-                OR C.COURSE_END_DATE LIKE '%$kw_search_course%'
+                OR C.COURSE_END_DATE LIKE '%$kw_search_course%')
                 ORDER BY COURSE_START_DATE ASC
             ";
                 if ($db->num_rows($sql_search_course)) {
@@ -159,6 +234,16 @@ if ($user) {
                 }
             } else {
                 echo '<br><br><div class="alert alert-info">Vui lòng nhập từ khóa.</div>';
+            }
+        } 
+        // hủy khóa học
+        else if ($action == 'cancel_course') {
+            $id_course = trim(htmlspecialchars(addslashes($_POST['id_course'])));
+            $sql_check_course_id_exist = "SELECT ID_COURSE FROM course WHERE ID_COURSE = '$id_course'";
+            if ($db->num_rows($sql_check_course_id_exist)) {
+                $sql_cancel_course = "UPDATE course SET COURSE_STATUS = '2' WHERE ID_COURSE = '$id_course'";
+                $db->query($sql_cancel_course);
+                $db->close();
             }
         } else {
             new Redirect($_DOMAIN); // Trở về trang index

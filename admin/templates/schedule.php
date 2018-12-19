@@ -53,14 +53,26 @@ if ($user) {
             echo ' ngày ' . $date['mday'];
             echo ' tháng ' . $date['mon'];
             echo ' năm ' . $date['year'];
-            
+            echo '
+                <p>
+                <form method="POST" id="formSearchSchedule" onsubmit="return false;">
+                    <div class="input-group">         
+                        <input type="date" class="form-control" id="kw_search_schedule">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-ok"></i></button>
+                        </span>
+                    </div>
+                </form>
+                </p>
+                ';
     // Content danh sách lịch trong ngày
-            $sql_get_schedule_in_date_current = "SELECT * FROM schedule S, course C, tutor T, user_profile UP
+            $sql_get_schedule_in_date_current = "SELECT * FROM schedule S, course C, tutor T, user_profile UP, major M
                     WHERE S.ID_COURSE = C.ID_COURSE
                     AND C.ID_TUTOR = T.ID_TUTOR
                     AND T.ID_PROFILE = UP.ID_PROFILE
+                    AND C.ID_MAJOR = M.ID_MAJOR
                     AND date(S.SCHEDULE_DATE) = date(now())
-                    ORDER BY S.SCHEDULE_START_TIME ASC";
+                    ORDER BY S.SCHEDULE_START_TIME DESC";
 
             if ($db->num_rows($sql_get_schedule_in_date_current)) {
                 echo
@@ -71,23 +83,17 @@ if ($user) {
                         <th><strong>Thời gian</strong></th>
                         <th><strong>Địa điểm</strong></th>                  
                         <th><strong>Gia sư</strong></th>
-                        <th><strong>Tình trạng buổi học</strong></th>
+                        <th><strong>Môn học</strong></th>
                         </tr>
                     ';
                 foreach ($db->fetch_assoc($sql_get_schedule_in_date_current, 0) as $key => $data_schedule) {
-
-                    if ($data_schedule['SCHEDULE_STATUS'] == 0) {
-                        $stt_schedule = '<label class="label label-danger">Đã hủy</label>';
-                    } else if ($data_schedule['SCHEDULE_STATUS'] == 1) {
-                        $stt_schedule = '<label class="label label-success">Đã hoạt động</label>';
-                    }
                     echo
                         '
             <tr>
             <th>' . $data_schedule['SCHEDULE_START_TIME'] . ' giờ - ' . $data_schedule['SCHEDULE_END_TIME'] . ' giờ</th>
             <th>' . $data_schedule['PLACE'] . '</th>
             <th>' . $data_schedule['NAME'] . '</th>
-            <th>' . $stt_schedule . '</th>
+            <th>' . $data_schedule['MAJOR_NAME'] . '</th>
             </tr>
             ';
                 }
@@ -111,9 +117,3 @@ else {
     new Redirect($_DOMAIN); // Trở về trang index
 }
 ?>
-<script type="text/javascript">
-            $(function () {
-                $('#datetimepicker1').datetimepicker();
-        }
-        );
-            </script>

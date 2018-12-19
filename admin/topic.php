@@ -11,9 +11,52 @@ if ($user) {
         $action = trim(addslashes(htmlspecialchars($_POST['action'])));
         
         // Thêm tài khoản
-        
+        if ($action == 'add_topic') {
+            // Xử lý các giá trị
+            $title_add_topic = trim(htmlspecialchars(addslashes($_POST['title_add_topic'])));
+            $category_add_topic = trim(htmlspecialchars(addslashes($_POST['category_add_topic'])));
+            $detail_add_topic = trim(htmlspecialchars(addslashes($_POST['detail_add_topic'])));
+            // Các biến xử lý thông báo
+            $show_alert = '<script>$("#formAddTopic .alert").removeClass("hidden");</script>';
+            $hide_alert = '<script>$("#formAddTopic .alert").addClass("hidden");</script>';
+            $success = '<script>$("#formAddTopic .alert").attr("class", "alert alert-success");</script>';
+            if ($title_add_topic == '' || $detail_add_topic == '' || $category_add_topic == '') {
+                echo $show_alert . 'Vui lòng điền đầy đủ thông tin.';
+            } else {
+                $sql_add_topic = "INSERT INTO news VALUES(
+                    '',
+                    '$title_add_topic',
+                    '$detail_add_topic',
+                    '',
+                    '',
+                    '0'
+                )";
+                $db->query($sql_add_topic);
+                $max_id = $db->query("SELECT MAX(NEWS_ID) FROM news");
+                $db->query($sql_add_category = "INSERT INTO news_categories_of_new VALUES(
+                    '$max_id',
+                    '$category_add_topic',
+                    ''
+                )");
+                $db->query("INSERT INTO editor VALUES(
+                    '',
+                    '$data_user[ID_USER]'
+                )");
+                $max_id_editor = $db->query("SELECT MAX(PARTY_ID) FROM editor");
+                $date = getdate();
+                $db->query("INSERT INTO editor_of_news VALUES(
+                    '',
+                    '$max_id_editor',
+                    '$max_id',
+                    '$date'
+                )");
+                $db->close();
+                echo $show_alert . $success . 'Thêm bài viết thành công.';
+                new Redirect($_DOMAIN . 'topic'); // Trở về trang danh sách bài viết
+            }
+        }
     // duyệt bài viết
-        if ($action == 'review_topic') {
+        else if ($action == 'review_topic') {
             $news_id = trim(htmlspecialchars(addslashes($_POST['news_id'])));
             $sql_check_news_id_exist = "SELECT NEWS_ID FROM news WHERE NEWS_ID = '$news_id'";
             if ($db->num_rows($sql_check_news_id_exist)) {
@@ -30,10 +73,10 @@ if ($user) {
                 WHERE NCT.NEWS_CATEGORY_TYPE_ID = NCON.NEWS_CATEGORY_TYPE_ID
                 AND NCON.NEWS_ID = N.NEWS_ID
                 AND N.NEWS_ID = EON.THING_ROLE_TYPE_ID_TO
-                OR N.NEWS_TITLE LIKE '%$kw_search_topic%'
+                AND (N.NEWS_TITLE LIKE '%$kw_search_topic%'
                 OR N.COVER_NEWS LIKE '%$kw_search_topic%'
-                OR NCT.NEWS_CATEGORY_TYPE_NAME LIKE '%$kw_search_topic%'
-                ORDER BY EON.FROM_DATE ASC
+                OR NCT.NEWS_CATEGORY_TYPE_NAME LIKE '%$kw_search_topic%')
+                ORDER BY EON.FROM_DATE DESC
                 ";
 
                 if ($db->num_rows($sql_search_topic)) {
@@ -102,6 +145,14 @@ if ($user) {
                 }
             } else {
                 echo '<br><br><div class="alert alert-info">Vui lòng nhập từ khóa.</div>';
+            }
+        } else if ($action == 'cancel_topic') {
+            $id_topic = trim(htmlspecialchars(addslashes($_POST['id_topic'])));
+            $sql_check_news_id_exist = "SELECT NEWS_ID FROM news WHERE NEWS_ID = '$id_topic'";
+            if ($db->num_rows($sql_check_news_id_exist)) {
+                $sql_cancel_topic = "UPDATE news SET STATUS = '2' WHERE NEWS_ID = '$id_topic'";
+                $db->query($sql_cancel_topic);
+                $db->close();
             }
         } else {
             new Redirect($_DOMAIN); // Trở về trang index

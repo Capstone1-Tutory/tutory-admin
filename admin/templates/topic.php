@@ -21,12 +21,46 @@ if ($user) {
         // Trang thêm bài viết
         if ($ac == 'add_topic') {
             // Dãy nút của thêm bài viết
-            echo
-                '
-                <a href="' . $_DOMAIN . 'topic" class="btn btn-default">
-                    <span class="glyphicon glyphicon-arrow-left"></span> Trở về
-                </a> 
-            ';
+            echo '
+                <h3>Thêm bài viết</h3>
+                <p class="form-add-topic">
+                <form method="POST" id="formAddTopic" onsubmit="return false;">
+                <div class="form-group">
+                <label>Tên đề tài</label>
+                <input type="text" class="form-control title" id="title_add_topic">
+                </div>
+                <div class="form-group">
+                <label>Lĩnh vực</label>
+                <select class="form-control title" id="category_add_topic">
+                ';
+            $sql_get_category = "SELECT * FROM news_category_type
+                        ";
+            if ($db->num_rows($sql_get_category)) {
+                foreach ($db->fetch_assoc($sql_get_category, 0) as $key => $data_category) {
+                    echo '
+                                    <option value="' . $data_category['NEWS_CATEGORY_TYPE_ID'] . '">' . $data_category['NEWS_CATEGORY_TYPE_NAME'] . '</option>
+                                ';
+                }
+            }
+            echo '
+                </select>
+                </div>
+                <div class="form-group">
+                <label>Nội dung</label>
+                <textarea class="form-control" id="detail_add_topic" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                <div class="form-inline">
+                <a href="' . $_DOMAIN . 'topic" class="btn btn-default" style="color:red">
+                <span class="glyphicon glyphicon-arrow-left" style="color:red"></span> Hủy
+                </a>
+                <button type="submit" class="btn btn-primary">Thêm</button>
+                </div>
+                </div>
+                <div class="alert alert-danger hidden"></div>
+                </form>
+                </p>
+                ';
   
             // Content thêm bài viết
 
@@ -44,7 +78,7 @@ if ($user) {
             '
             <h3>Bài viết</h3><hr>
             <form class="form-inline">
-            <a href="' . $_DOMAIN . 'posts/add_topic" class="btn btn-default">
+            <a href="' . $_DOMAIN . 'topic/add_topic" class="btn btn-default">
                 <span class="glyphicon glyphicon-plus"></span> Thêm bài viết
             </a> 
             <a href="' . $_DOMAIN . 'topic" class="btn btn-default">
@@ -60,7 +94,7 @@ if ($user) {
         WHERE NCT.NEWS_CATEGORY_TYPE_ID = NCON.NEWS_CATEGORY_TYPE_ID
         AND NCON.NEWS_ID = N.NEWS_ID
         AND N.NEWS_ID = EON.THING_ROLE_TYPE_ID_TO
-        ORDER BY EON.FROM_DATE ASC
+        ORDER BY EON.FROM_DATE DESC
         ";
 
         if ($db->num_rows($sql_get_topic)) {
@@ -97,9 +131,12 @@ if ($user) {
                     <span class="glyphicon glyphicon-ok"></span> Chưa duyệt</a>
                     ';
                 } else if ($data_topic['STATUS'] == 1) {
-                    $stt_topic = '<label class="label label-primary">Đã duyệt</label>';
+                    $stt_topic = '<label class="label label-primary">Đã duyệt</label>
+                    <a data-id="' . $data_topic['NEWS_ID'] . '" class="label label-danger" id="cancel_topic">
+                    <span class="glyphicon glyphicon-remove-sign"></span> Hủy</a>
+                    ';
                 } else if ($data_topic['STATUS'] == 2) {
-                    $stt_topic = '<label class="label label-default">Đã hủy</label>';
+                    $stt_topic = '<label class="label label-danger">Đã hủy</label>';
                 }
                 $sql_get_editor = "SELECT * FROM editor E, user_account UA, user_profile UP, type_user TU
                     WHERE $data_topic[PARTY_ROLE_TYPE_ID_FROM] = E.PARTY_ID

@@ -135,8 +135,10 @@ $('#formUpdateInfo button').on('click', function () {
     $name_update = $('#name_update').val();
     $email_update = $('#email_update').val();
     $phone_update = $('#phone_update').val();
+    $birthday_update = $('#birthday_update').val();
+    $address_update = $('#address_update').val();
 
-    if ($name_update && $email_update) {
+    if ($name_update && $email_update && $phone_update && $birthday_update && $address_update) {
         $.ajax({
             url: $_DOMAIN + 'profile.php',
             type: 'POST',
@@ -144,7 +146,9 @@ $('#formUpdateInfo button').on('click', function () {
                 name_update: $name_update,
                 email_update: $email_update,
                 phone_update: $phone_update,
-                action: 'update_info'
+                birthday_update: $birthday_update,
+                address_update: $address_update,
+                action: 'up_profile'
             }, success: function (data) {
                 $('#formUpdateInfo .alert').removeClass('hidden');
                 $('#formUpdateInfo .alert').html(data);
@@ -163,18 +167,18 @@ $('#formUpdateInfo button').on('click', function () {
 // Đổi mật khẩu
 $('#formChangePw button').on('click', function () {
     $('#formChangePw button').html('Đang tải ...');
-    $old_pw_change = $('#old_pw_change').val();
-    $new_pw_change = $('#new_pw_change').val();
-    $re_new_pw_change = $('#re_new_pw_change').val();
+    $oldPwChange = $('#oldPwChange').val();
+    $newPwChange = $('#newPwChange').val();
+    $reNewPwChange = $('#reNewPwChange').val();
 
-    if ($old_pw_change && $new_pw_change && $re_new_pw_change) {
+    if ($oldPwChange && $newPwChange && $reNewPwChange) {
         $.ajax({
             url: $_DOMAIN + 'profile.php',
             type: 'POST',
             data: {
-                old_pw_change: $old_pw_change,
-                new_pw_change: $new_pw_change,
-                re_new_pw_change: $re_new_pw_change,
+                oldPwChange: $oldPwChange,
+                newPwChange: $newPwChange,
+                reNewPwChange: $reNewPwChange,
                 action: 'change_pw'
             }, success: function (data) {
                 $('#formChangePw .alert').removeClass('hidden');
@@ -196,11 +200,8 @@ $('#formAddAcc button').on('click', function () {
     $un_add_acc = $('#un_add_acc').val();
     $pw_add_acc = $('#pw_add_acc').val();
     $repw_add_acc = $('#repw_add_acc').val();
-    $name_add_acc = $('#name_add_acc').val();
-    $email_add_acc = $('#email_add_acc').val();
     $id_type_add_acc = $('#id_type_add_acc').val();
-
-    if ($un_add_acc == '' || $pw_add_acc == '' || $repw_add_acc == '' || $name_add_acc == '' || $email_add_acc == '' || $id_type_add_acc == '') {
+    if ($un_add_acc == '' || $pw_add_acc == '' || $repw_add_acc == '' || $id_type_add_acc == '') {
         $('#formAddAcc .alert').removeClass('hidden');
         $('#formAddAcc .alert').html('Vui lòng điền đầy đủ thông tin.');
     }
@@ -212,8 +213,6 @@ $('#formAddAcc button').on('click', function () {
                 un_add_acc: $un_add_acc,
                 pw_add_acc: $pw_add_acc,
                 repw_add_acc: $repw_add_acc,
-                name_add_acc: $name_add_acc,
-                email_add_acc: $email_add_acc,
                 id_type_add_acc: $id_type_add_acc,
                 action: 'add_acc'
             }, success: function (data) {
@@ -248,7 +247,7 @@ $('#del_acc_list').on('click', function () {
                     action: 'del_acc_list'
                 },
                 success: function (data) {
-                    $('#list_schedule_in_course').html(data);
+                    $('#list_acc').html(data);
                 }, error: function () {
                     alert('Đã có lỗi xảy ra, hãy thử lại.');
                 }
@@ -282,13 +281,109 @@ $('.del-acc').on('click', function () {
     }
 });
 // lấy id chuyên ngành để đổ ra gia sư
-$(document).ready(function () {
-    $('#major_add_course').change(function () {
-        $id_major = $('#major_add_course').val();
-        alert(id_major);
-    })
+$('#major_add_course').on('click', function () {
+    $id_major = $('#major_add_course').val();
+    $.ajax({
+        url: $_DOMAIN + 'course.php',
+        type: 'POST',
+        data: {
+            id_major: $id_major,
+            action: 'load_major'
+        },
+        success: function (data) {
+            $('#tutor_add_course').html(data);
+        }, error: function () {
+            alert('Lỗi!');
+        }
+    });
 });
-
+// lấy địa chỉ
+$('#city_add_course').on('click', function () {
+    $matp = $('#city_add_course').val();
+    $.ajax({
+        url: $_DOMAIN + 'course.php',
+        type: 'POST',
+        data: {
+            matp: $matp,
+            action: 'load_city'
+        },
+        success: function (data) {
+            $('#district_add_course').html(data);
+        }, error: function () {
+            alert('Lỗi!');
+        }
+    });
+});
+$('#district_add_course').on('click', function () {
+    $maqh = $('#district_add_course').val();
+    $.ajax({
+        url: $_DOMAIN + 'course.php',
+        type: 'POST',
+        data: {
+            maqh: $maqh,
+            action: 'load_district'
+        },
+        success: function (data) {
+            $('#commune_add_course').html(data);
+        }, error: function () {
+            alert('Lỗi!');
+        }
+    });
+});
+// thêm khóa học
+$('#formAddCourse button').on('click', function () {
+    $major_add_course = $('#major_add_course').val();
+    $tutor_add_course = $('#tutor_add_course').val();
+    $street_add_course = $('#street_add_course').val();
+    $quantity_add_course = $('#quantity_add_course').val();
+    $startdate_add_course = $('#startdate_add_course').val();
+    $enddate_add_course = $('#enddate_add_course').val();
+    $('#dayweek_add_course input:radio[name=day]:checked').each(function (i) {
+        $dayweek_add_course[i] = $('#dayweek_add_course').val();
+    });
+    $starttime_add_course = $('#starttime_add_course').val();
+    $endtime_add_course = $('#endtime_add_course').val();
+    if ($major_add_course == '' || $tutor_add_course == '' || $street_add_course == '' || $quantity_add_course == '' || $startdate_add_course == '' || $enddate_add_course == '' || $starttime_add_course == '' || $endtime_add_course == '') {
+        $('#formAddCourse .alert').removeClass('hidden');
+        $('#formAddCourse .alert').html('Vui lòng điền đầy đủ thông tin.');
+    } else if ($dayweek_add_course.length === 0) {
+        $('#formAddCourse .alert').removeClass('hidden');
+        $('#formAddCourse .alert').html('Vui lòng chọn lịch học.');
+    } else if ($startdate_add_course >= getDate()) {
+        $('#formAddCourse .alert').removeClass('hidden');
+        $('#formAddCourse .alert').html('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại.');
+    } else if ($enddate_add_course > $startdate_add_course) {
+        $('#formAddCourse .alert').removeClass('hidden');
+        $('#formAddCourse .alert').html('Ngày kết thúc phải lớn hơn ngày bắt đầu.');
+    }
+    else if ($endtime_add_course > $starttime_add_course) {
+        $('#formAddCourse .alert').removeClass('hidden');
+        $('#formAddCourse .alert').html('Giờ kết thúc phải lớn hơn giờ bắt đầu.');
+    }
+    else {
+        $.ajax({
+            url: $_DOMAIN + 'course.php',
+            type: 'POST',
+            data: {
+                major_add_course: $major_add_course,
+                tutor_add_course: $tutor_add_course,
+                street_add_course: $street_add_course,
+                quantity_add_course: $quantity_add_course,
+                startdate_add_course: $startdate_add_course,
+                enddate_add_course: $enddate_add_course,
+                dayweek_add_course: $dayweek_add_course,
+                starttime_add_course: $starttime_add_course,
+                endtime_add_course: $endtime_add_course,
+                action: 'add_course'
+            }, success: function (data) {
+                $('#formAddCourse .alert').html(data);
+            }, error: function () {
+                $('#formAddCourse .alert').removeClass('hidden');
+                $('#formAddCourse .alert').html('Đã xảy ra lỗi, vui lòng thử lại sau.');
+            }
+        });
+    }
+});
 // duyệt bài viết
 $('#review_topic').on('click', function () {
     $confirm = confirm('Bạn có muốn duyệt bài viết này không?');
@@ -398,5 +493,100 @@ $('#formSearchTopic button').on('click', function () {
                 $('#list_topic').html(data);
             }
         });
+    }
+});
+
+// tìm lịch theo ngày
+$('#formSearchSchedule button').on('click', function () {
+    $kw_search_schedule = $('#kw_search_schedule').val();
+    if ($kw_search_schedule != '') {
+        $.ajax({
+            url: $_DOMAIN + 'schedule.php',
+            type: 'POST',
+            data: {
+                kw_search_schedule: $kw_search_schedule,
+                action: 'search_schedule'
+            }, success: function (data) {
+                $('#list_schedule').html(data);
+            }
+        });
+    }
+});
+
+// thêm bài viết
+
+$('#formAddTopic button').on('click', function () {
+    $title_add_topic = $('#title_add_topic').val();
+    $category_add_topic = $('#category_add_topic').val();
+    $detail_add_topic = $('#detail_add_topic').val();
+    if ($title_add_topic == '' || $detail_add_topic == '' || $category_add_topic == '') {
+        $('#formAddTopic .alert').removeClass('hidden');
+        $('#formAddTopic .alert').html('Vui lòng điền đầy đủ thông tin.');
+    }
+    else {
+        $.ajax({
+            url: $_DOMAIN + 'topic.php',
+            type: 'POST',
+            data: {
+                title_add_topic: $title_add_topic,
+                category_add_topic: $category_add_topic,
+                detail_add_topic: $detail_add_topic,
+                action: 'add_topic'
+            }, success: function (data) {
+                $('#formAddTopic .alert').html(data);
+            }, error: function () {
+                $('#formAddTopic .alert').removeClass('hidden');
+                $('#formAddTopic .alert').html('Đã xảy ra lỗi, vui lòng thử lại sau.');
+            }
+        });
+    }
+});
+
+// hủy khóa học và hủy bài viết
+$('#cancel_course').on('click', function () {
+    $confirm = confirm('Bạn có muốn hủy khóa học này không?');
+    if ($confirm == true) {
+        $id_course = $(this).attr('data-id');
+        $.ajax({
+            url: $_DOMAIN + 'course.php',
+            type: 'POST',
+            data: {
+                id_course: $id_course,
+                action: 'cancel_course'
+            },
+            success: function () {
+                location.reload();
+                alert('Hủy thành công.');
+            }, error: function () {
+                alert('Không thể hủy vào lúc này, vui lòng thử lại sau.');
+            }
+        });
+    }
+    else {
+        return false;
+    }
+});
+
+$('#cancel_topic').on('click', function () {
+    $confirm = confirm('Bạn có muốn hủy bài viết này không?');
+    if ($confirm == true) {
+        $id_topic = $(this).attr('data-id');
+        $.ajax({
+            url: $_DOMAIN + 'topic.php',
+            type: 'POST',
+            data: {
+                id_topic: $id_topic,
+                action: 'cancel_topic'
+            },
+            success: function () {
+                location.reload();
+                alert('Hủy thành công.');
+            }, error: function () {
+                alert('Không thể hủy vào lúc này, vui lòng thử lại sau.');
+            }
+        });
+    }
+    else {
+        return false;
     }
 });

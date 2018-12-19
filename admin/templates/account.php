@@ -26,12 +26,6 @@ if ($user) {
         if ($ac != '') {
             // Trang thêm tài khoản
             if ($ac == 'add_account') {
-                echo
-                    '
-                <a href="' . $_DOMAIN . 'account" class="btn btn-default">
-                <span class="glyphicon glyphicon-arrow-left"></span> Trở về
-                </a> 
-                ';
                 // Content thêm tài khoản
                 echo '
                 <h3>Thêm tài khoản</h3>
@@ -49,23 +43,20 @@ if ($user) {
                 <label>Nhập lại mật khẩu</label>
                 <input type="password" class="form-control title" id="repw_add_acc">
                 </div>
-                <div class="form-group">
-                <label>Họ và tên</label>
-                <input type="text" class="form-control title" id="name_add_acc">
-                </div>
-                <div class="form-group">
-                <label>Email</label>
-                <input type="text" class="form-control title" id="email_add_acc">
-                </div>
-                <div class="form-group">
-                <label>Chọn vai trò tài khoản</label>       
-                <select  class="form-control title" name="id_type_add_acc">
+                <div class="form-group">     
+                <select  class="form-control title" id="id_type_add_acc">
+                    <option value="">Chọn vai trò tài khoản</option>
                     <option value="ad">Quản trị viên</option>
                     <option value="user">Người dùng</option>
                 </select>
                 </div>
                 <div class="form-group">
-                <button type="submit" class="btn btn-primary">Thêm</button> 
+                <div class="form-inline">
+                <a href="' . $_DOMAIN . 'account" class="btn btn-default" style="color:red">
+                <span class="glyphicon glyphicon-arrow-left" style="color:red"></span> Hủy
+                </a>
+                <button type="submit" class="btn btn-primary">Thêm</button>
+                </div>
                 </div>
                 <div class="alert alert-danger hidden"></div>
                 </form>
