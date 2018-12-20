@@ -338,17 +338,11 @@ $('#formAddCourse button').on('click', function () {
     $quantity_add_course = $('#quantity_add_course').val();
     $startdate_add_course = $('#startdate_add_course').val();
     $enddate_add_course = $('#enddate_add_course').val();
-    $('#dayweek_add_course input:radio[name=day]:checked').each(function (i) {
-        $dayweek_add_course[i] = $('#dayweek_add_course').val();
-    });
     $starttime_add_course = $('#starttime_add_course').val();
     $endtime_add_course = $('#endtime_add_course').val();
     if ($major_add_course == '' || $tutor_add_course == '' || $street_add_course == '' || $quantity_add_course == '' || $startdate_add_course == '' || $enddate_add_course == '' || $starttime_add_course == '' || $endtime_add_course == '') {
         $('#formAddCourse .alert').removeClass('hidden');
         $('#formAddCourse .alert').html('Vui lòng điền đầy đủ thông tin.');
-    } else if ($dayweek_add_course.length === 0) {
-        $('#formAddCourse .alert').removeClass('hidden');
-        $('#formAddCourse .alert').html('Vui lòng chọn lịch học.');
     } else if ($startdate_add_course >= getDate()) {
         $('#formAddCourse .alert').removeClass('hidden');
         $('#formAddCourse .alert').html('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại.');
@@ -371,7 +365,6 @@ $('#formAddCourse button').on('click', function () {
                 quantity_add_course: $quantity_add_course,
                 startdate_add_course: $startdate_add_course,
                 enddate_add_course: $enddate_add_course,
-                dayweek_add_course: $dayweek_add_course,
                 starttime_add_course: $starttime_add_course,
                 endtime_add_course: $endtime_add_course,
                 action: 'add_course'

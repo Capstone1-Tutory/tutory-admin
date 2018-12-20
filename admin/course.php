@@ -18,11 +18,11 @@ if ($user) {
                 AND TRM.ID_MAJOR = '$id_major'
                 ";
             if ($db->num_rows($sql_name_tutor)) {
-                foreach ($db->fetch_assoc($sql_name_tutor, 0) as $key => $name_tutor)
-
+                foreach ($db->fetch_assoc($sql_name_tutor, 0) as $key => $name_tutor) {
                     echo '
                         <option value="' . $name_tutor['ID_TUTOR'] . '">' . $name_tutor['NAME'] . '</option>
                         ';
+                }
             }
         } 
         // load huyện
@@ -63,7 +63,6 @@ if ($user) {
             $quantity_add_course = trim(htmlspecialchars(addslashes($_POST['quantitty_add_course'])));
             $startdate_add_course = trim(htmlspecialchars(addslashes($_POST['startdate_add_course'])));
             $enddate_add_course = trim(htmlspecialchars(addslashes($_POST['enddate_add_course'])));
-            //$dayweek_add_course = trim(htmlspecialchars(addslashes($_POST['dayweek_add_course'])));
             $starttime_add_course = trim(htmlspecialchars(addslashes($_POST['starttime_add_course'])));
             $endtime_add_course = trim(htmlspecialchars(addslashes($_POST['endtime_add_course'])));
              // Các biến xử lý thông báo
@@ -72,7 +71,11 @@ if ($user) {
             $success = '<script>$("#formAddCourse .alert").attr("class", "alert alert-success");</script>';
             // nếu gia sư đó chưa từng dạy lớp nào
             $sql_check_tutor = "SELECT ID_TUTOR FROM course";
-            if ($db->query($sql_check_tutor) != $tutor_add_course) {
+            if ($major_add_course == '' || $tutor_add_course == '' || $street_add_course == '' || $quantity_add_course == ''
+                || $startdate_add_course == '' || $enddate_add_course == '' || $starttime_add_course == '' || $endtime_add_course == '') {
+                echo $show_alert . 'Vui lòng điền đầy đủ thông tin.';
+            } else if ($sql_check_tutor != $tutor_add_course) {
+
                 $sql_add_course = "INSERT INTO course VALUES(
                     '',
                     '$tutor_add_course',
@@ -83,7 +86,6 @@ if ($user) {
                     '$major_add_course'
                 )";
                 $db->query($sql_add_course);
-
                 $db->close();
                 echo $show_alert . $success . 'Thêm khóa học thành công.';
                 new Redirect($_DOMAIN . 'course'); // Trở về trang danh sách tài khoản

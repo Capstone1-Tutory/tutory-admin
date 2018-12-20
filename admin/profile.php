@@ -98,12 +98,12 @@ if ($user) {
         }
         // Đổi mật khẩu
         else if ($action == 'change_pw') {
-    // Xử lý các giá trị
+        // Xử lý các giá trị
             $oldPwChange = md5($_POST['oldPwChange']);
             $newPwChange = trim(htmlspecialchars(addslashes($_POST['newPwChange'])));
             $reNewPwChange = trim(htmlspecialchars(addslashes($_POST['reNewPwChange'])));
         
-    // Các biến xử lý thông báo
+        // Các biến xử lý thông báo
             $show_alert = '<script>$("#formChangePw .alert").removeClass("hidden");</script>';
             $hide_alert = '<script>$("#formChangePw .alert").addClass("hidden");</script>';
             $success = '<script>$("#formChangePw .alert").attr("class", "alert alert-success");</script>';

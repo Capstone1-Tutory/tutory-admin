@@ -138,15 +138,15 @@ if ($user) {
                     </tr>
                     ';
                     }
-                }
-// Nếu không có bài viết
-                else {
+                } else {
                     echo '<br><br><div class="alert alert-info">Không tìm thấy bài viết nào.</div>';
                 }
             } else {
                 echo '<br><br><div class="alert alert-info">Vui lòng nhập từ khóa.</div>';
             }
-        } else if ($action == 'cancel_topic') {
+        } 
+        // hủy bài viết
+        else if ($action == 'cancel_topic') {
             $id_topic = trim(htmlspecialchars(addslashes($_POST['id_topic'])));
             $sql_check_news_id_exist = "SELECT NEWS_ID FROM news WHERE NEWS_ID = '$id_topic'";
             if ($db->num_rows($sql_check_news_id_exist)) {
