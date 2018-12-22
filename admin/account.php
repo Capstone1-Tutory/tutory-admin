@@ -45,12 +45,6 @@ if ($user) {
                 '$id_type_add_acc'
             )";
                 $db->query($sql_add_user_account);
-                // tạo 1 profle trống có id_user trùng với user vừa tạo
-                $max_id = $db->query("SELECT MAX(ID_USER) FROM user_account");
-                $db->query("INSERT INTO user_profile VALUES(
-                '','','','','','','','',
-                '$max_id','0','',''
-                )");
                 $db->close();
 
                 echo $show_alert . $success . 'Thêm tài khoản thành công.';
@@ -142,10 +136,10 @@ if ($user) {
                 }
 // Nếu không có tài khoản
                 else {
-                    echo '<br><br><div class="alert alert-info">Không tìm thấy tài khoản nào.</div>';
+                    echo '<br><br><div class="alert alert-danger">Không tìm thấy tài khoản nào.</div>';
                 }
             } else {
-                echo '<br><br><div class="alert alert-info">Vui lòng nhập từ khóa.</div>';
+                echo '<br><br><div class="alert alert-danger">Vui lòng nhập từ khóa.</div>';
             }
         } else {
             new Redirect($_DOMAIN); // Trở về trang index

@@ -44,14 +44,12 @@ if ($user) {
                             </tr>
                             ';
                     }
-
                     echo
                         '
                     </table>
                      ';
                 } else {
-                    echo '<br><br><div class="alert alert-danger">Không có lớp học nào diễn ra trong ngày.</div>';
-                    //echo '<br><br><div class="alert alert-danger">Không có lớp học nào diễn ra trong ngày.' . $kw_search_schedule . '</div>';
+                    echo '<br><br><div class="alert alert-danger">Không có lớp học nào diễn ra trong ngày ' . $kw_search_schedule . '.</div>';
                 }
             }
         } else {

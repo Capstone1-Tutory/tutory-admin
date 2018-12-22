@@ -37,7 +37,7 @@ if ($user) {
 
         $sql_up_avt = "UPDATE user_profile SET URL_AVATAR = '$url_img' WHERE ID_PROFILE = '$data_user[ID_PROFILE]'";
         $db->query($sql_up_avt);
-        echo 'Upload Completed.';
+        echo 'Cập nhật thành công.';
         $db->close();
         new Redirect($_DOMAIN . 'profile');
     } 
@@ -61,8 +61,8 @@ if ($user) {
             $name_update = trim(htmlspecialchars(addslashes($_POST['name_update'])));
             $email_update = trim(htmlspecialchars(addslashes($_POST['email_update'])));
             $phone_update = trim(htmlspecialchars(addslashes($_POST['phone_update'])));
-            $birthday_update = trim(htmlspecialchars(addcslashes($_POST['birthday_update'])));
-            $address_update = trim(htmlspecialchars(addcslashes($_POST['address_update'])));
+            $birthday_update = trim(htmlspecialchars(addslashes($_POST['birthday_update'])));
+            $address_update = trim(htmlspecialchars(addslashes($_POST['address_update'])));
         
     // Các biến xử lý thông báo
             $show_alert = '<script>$("#formUpdateInfo .alert").removeClass("hidden");</script>';
@@ -79,8 +79,10 @@ if ($user) {
         // Kiểm tra số điện thoại
                 } else if ($phone_update && (strlen($phone_update) < 10 || strlen($phone_update) > 11 || preg_match('/^[0-9]+$/', $phone_update) == false)) {
                     echo $show_alert . strlen($phone_update) . 'Số điện thoại không đúng';
+                } else if ($birthday_update >= getdate()) {
+                    echo $show_alert . 'Ngày sinh không hợp lệ.';
                 } else {
-                    $sql_update_info = "UPDATE admin_profile SET 
+                    $sql_update_info = "UPDATE user_profile SET
                 NAME = '$name_update',
                 EMAIL = '$email_update',
                 PHONE = '$phone_update',
@@ -91,6 +93,7 @@ if ($user) {
                     $db->query($sql_update_info);
                     $db->close();
                     echo $success . 'Cập nhật thành công';
+                    new Redirect($_DOMAIN . 'profile');
                 }
             } else {
                 echo $show_alert . 'Vui lòng điền đẩy đủ thông tin.';
@@ -116,8 +119,10 @@ if ($user) {
                 } else if (strlen($newPwChange) < 6) {
                     echo $show_alert . 'Mật khẩu mới quá ngắn.';
         // Kiểm tra mật khẩu mới khớp với mật khẩu mới nhập lại 
+                } else if ($oldPwChange == $newPwChange) {
+                    echo $show_alert . 'Đây là mật khẩu cũ';
                 } else if ($newPwChange != $reNewPwChange) {
-                    echo $show_alert . 'Mật khẩu mới không trùng khơp.';
+                    echo $show_alert . 'Mật khẩu mới không trùng khớp.';
                 } else {
                     $newPwChange = md5($newPwChange);
                     $sql_change_pw = "UPDATE user_account SET PASS_WORD = '$newPwChange' WHERE ID_USER = '$data_user[ID_USER]'";

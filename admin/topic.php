@@ -32,9 +32,9 @@ if ($user) {
                     '0'
                 )";
                 $db->query($sql_add_topic);
-                $max_id = $db->query("SELECT MAX(NEWS_ID) FROM news");
+                //$max_id = $db->query("SELECT MAX(NEWS_ID) FROM news");
                 $db->query($sql_add_category = "INSERT INTO news_categories_of_new VALUES(
-                    '$max_id',
+                    (SELECT MAX(NEWS_ID) FROM news),
                     '$category_add_topic',
                     ''
                 )");
@@ -139,10 +139,10 @@ if ($user) {
                     ';
                     }
                 } else {
-                    echo '<br><br><div class="alert alert-info">Không tìm thấy bài viết nào.</div>';
+                    echo '<br><br><div class="alert alert-danger">Không tìm thấy bài viết nào.</div>';
                 }
             } else {
-                echo '<br><br><div class="alert alert-info">Vui lòng nhập từ khóa.</div>';
+                echo '<br><br><div class="alert alert-danger">Vui lòng nhập từ khóa.</div>';
             }
         } 
         // hủy bài viết
