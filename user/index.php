@@ -10,31 +10,18 @@
 <body>
 	<?php
 	include('header.php');
-	include('menutop.php');	
+  include('sildeshow.php');
+	include('menutop2.php');	
 	include('left.php');
 	?>
-	<div class="col-sm-8 "> 
+	<div class="col-sm-8 " id="rowcontent"> 
 		 <?php 
 
-
-		   
-            if(isset($_GET['page']))
-            {
-            	$page=$_GET['page'];
-            	include('layout/'.$page.'.php');
-            }
-
-            else
             	if(isset($_GET['category']))
             	{
             		$page="bangtintheoloai";
             	   include('layout/'.$page.'.php');
             	}
-            	else
-                 {
-            	 $page="trangchu";
-		         include('layout/'.$page.'.php');
-                 }
 
 
 		 ?>
@@ -46,5 +33,36 @@
 </body>
 <script src="../static/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../static/vendor/jquery/jquery.min.js"></script>
-
+<script type="text/javascript">
+	$('#rowcontent').load('layout/trangchu.php');
+  $("#linkgioithieu").click(function(event) {
+  	$("#rowcontent").load("layout/gioithieu.php");
+  });
+  $("#linktrangchu").click(function(event) {
+  	$("#rowcontent").load("layout/trangchu.php");
+  });
+  $("#linktintuc").click(function(event) {
+  	$("#rowcontent").load("layout/tintucsukien.php");
+  });
+  $("#linkkhoahoc").click(function(event) {
+  	$("#rowcontent").load("layout/khoahoc.php");
+  });
+  $("#linklienhe").click(function(event) {
+  	$("#rowcontent").load("layout/lienhe.php");
+  });
+  function loadtintheoloai(idmajor){
+  	 $.get('layout/bangtintheoloai.php',{category:idmajor}, function(data) {
+  	 	$("#rowcontent").html(data);
+  	 });
+  }
+</script>
+<script type="text/javascript">
+	$("#btnsearch").click(function(event) {
+  	var majorname= $("#txtsearch").val();
+  	$.get('layout/search.php',{majorname:majorname}, function(data) {
+       $("#rowcontent").html(data);
+  	});
+  });
+  
+</script>
 </html>

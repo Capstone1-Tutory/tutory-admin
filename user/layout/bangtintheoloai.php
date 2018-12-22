@@ -1,6 +1,5 @@
 <?php 
-include('module/config.php');
-
+include('../module/config.php');
 $category = $_GET['category'];
 ?>
    
@@ -34,7 +33,9 @@ $category = $_GET['category'];
           $sql="SELECT n.NEWS_ID,uf.NAME,uf.URL_AVATAR, uf.PHONE,uf.EMAIL ,n.NEWS_TITLE, n.DETAILS ,en.FROM_DATE FROM news n INNER JOIN news_categories_of_new ncn ON ncn.NEWS_ID = n.NEWS_ID INNER JOIN editor_of_news en ON en.THING_ROLE_TYPE_ID_TO=n.NEWS_ID INNER JOIN editor ed ON ed.PARTY_ID=en.PARTY_ROLE_TYPE_ID_FROM INNER JOIN user_profile uf ON uf.ID_USER= ed.ID_USER where ncn.NEWS_CATEGORY_TYPE_ID='{$category}' and n.STATUS= 1 ORDER BY en.FROM_DATE DESC";
               $result=mysqli_query($conn,$sql);
               if(mysqli_num_rows($result)>0)
+              {
                 while ($row=mysqli_fetch_assoc($result)) {
+              
           ?>
            <div class="row">
             <div class="col-sm-3 avatanews">
@@ -66,6 +67,11 @@ $category = $_GET['category'];
             </script>
         <?php
           }
+        }
+        else
+        {
+          echo "<h4>Không có tin nào</h4>";
+        }
         ?>
  <script src="../../static/vendor/jquery/jquery.min.js"></script>
   <!-- dang tin-->
