@@ -59,9 +59,17 @@
 <script type="text/javascript">
 	$("#btnsearch").click(function(event) {
   	var majorname= $("#txtsearch").val();
+    if(majorname=="")
+    {
+      alert(" vui lòng nhập môn học cần tìm");
+
+    }
+    else
+    {
   	$.get('layout/search.php',{majorname:majorname}, function(data) {
        $("#rowcontent").html(data);
   	});
+     }
   });
   
 </script>

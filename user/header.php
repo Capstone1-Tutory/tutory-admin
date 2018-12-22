@@ -228,16 +228,21 @@ session_start();
       var user=$("#Re_username").val();
       var pass=$("#Re_password").val();
       var epass=$("#Re_enterpassword").val();
-      var nameRegex =/^[a-zA-Z0-9]+$/;
+      var nameRegex = /^[A-Za-z][0-9_\.]{6,32}$/;
+      var passRegex=/^([A-Za-z0-9])([\w_\.!@#$%^&*()]+){5,31}$/;
       if(user==""||pass==""||epass=="")
       {
         $("#RE_response").html("Vui lòng nhập đầy đủ thông tin");
       }
       else
         if (!user.match(nameRegex)) {
-            $("#RE_response").html("Tên đăng nhập chỉ bao gồm chữ và số");
+            $("#RE_response").html("Tên đăng nhập không đúng định dạng <br>Phải bắt đầu bằng chữ từ 6-32 kí tự");
         }
         else
+          if (!pass.match(passRegex)) {
+            $("#RE_response").html("Mật khẩu không đúng định dạng <br>Mật khẩu bao gồm các ký chữ cái, chữ số, ký tự đặc biệt, dấu chấm <br>Độ dài 6-32 ký tự");
+          }
+          else
         if (pass!=epass) {
            $("#RE_response").html("Xác nhận mật khẩu không đúng");
         }
@@ -258,7 +263,12 @@ session_start();
     $("#btndoimatkhau").click(function(event) {
       var passold= $("#txtC_pass").val();
       var passnew=$("#txtC_passnew").val();
+      var passRegex=/^([A-Za-z0-9])([\w_\.!@#$%^&*()]+){5,31}$/;
       var enterpassnew =$("#txtC_enterpassnew").val();
+      if(!passnew.match(passRegex))
+      {
+        $("#C_response").html("Mật khẩu không đúng định dạng <br>Mật khẩu bao gồm các ký chữ cái, chữ số, ký tự đặc biệt, dấu chấm <br>Độ dài 6-32 ký tự");
+      }else
       if(passnew!=enterpassnew)
       {
         $("#C_response").html("Mật khẩu không trùng khớp");

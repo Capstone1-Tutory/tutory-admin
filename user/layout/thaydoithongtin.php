@@ -79,15 +79,21 @@ include('../module/config.php') ;
      var sdt= $("#txtphone").val();
      var idxa= $("#slxa").val();
      var sonha= $("#txtsonha").val();
+     var nameformat=/\w/;
      var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+     var sdtfomat =/((09|03|07|08|05)+([0-9]{8})\b)/;
      if(name==""||email==""||sdt==""|| idxa=="")
      {
       $("#thongbao").html("Vui lòng nhập đủ thông tin");
      }
+     else
+      if (!nameformat.test(name)) {
+        $("#thongbao").html("Lỗi!!Tên không đúng ");
+      }
       else
-        if(!sdt.match(/^\d+/)||sdt.length>20|| sdt.length<10)
+        if(!sdtfomat.test(sdt)||sdt.length>20|| sdt.length<10)
       {
-          $("#thongbao").html("Lỗi!! Số điện thoại phải là số từ 10-20 kí tự");
+          $("#thongbao").html("Lỗi!! Số điện thoại không đúng chuẩn");
       }
       else
         if (!mailformat.test(email))
