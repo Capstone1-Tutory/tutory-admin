@@ -15,19 +15,23 @@ include('../module/config.php') ;
  <div class="row content">
   <div class="col" style="width:30%">
    <p>Tên: </p>
-  <input class="form-control" type="text" id="txtname" name="name" value="<?php echo $row["NAME"]; ?>">
+  <input class="form-control" type="text" id="txtname" name="name" value="<?php echo $row["NAME"]; ?>" placeholder="Nhập tên của bạn...">
   <p> Ngày sinh:  </p>
   <input class="form-control"  type="date" id="txtdate" name="birthday" value="<?php echo $row["BIRTHDAY"]; ?>">
   <p>Giới tính:</p>
   <select id="slsex" class="form-control col-sm-4" name="sex" >   
     <option value="Nam">Nam</option>
-    <option value="Nữ">Nữ</option>     
+    <option value="Nữ">Nữ</option>  
+    
    </select>
+   <p>Số điện thoại:</p>
+    <input class="form-control" type="text" id="txtphone" name="phone"value=" <?php echo $row['PHONE'] ?>" placeholder="VD:0031941241">   
   </div>
   <div class="col" style=" width:70%">
-  
-      <p>Địa Chỉ</p>
-      <input class="form-control"  type="text" id="txtsonha" value="<?php echo $row["SO_NHA"] ?>">
+      <p>Email:</p> 
+  <input class="form-control"  type="email" id="txtemail" name="email" value=" <?php echo $row['EMAIL'] ?>" placeholder="example@example.com"> 
+      <p>Địa Chỉ:</p>
+      <input class="form-control"  type="text" id="txtsonha" value="<?php echo $row["SO_NHA"] ?>" placeholder="Nhập tên đường...">
       <br>
       <div class="row" style="margin-left: 4px">
         <select class="form-control"  id="sltinhtp" name="sltinhtp">
@@ -52,18 +56,16 @@ include('../module/config.php') ;
    </select>
       </div>
       
-  <p>Email:</p> 
-  <input class="form-control"  type="email" id="txtemail" name="email" value=" <?php echo $row['EMAIL'] ?>" required> 
-  <p>Số điện thoại:</p>
-  <input class="form-control" type="text" id="txtphone" name="phone"value=" <?php echo $row['PHONE'] ?>">
-     <br>
-     <p id="thongbao" style="color:red"></p>
-     <br>
-    
+  
+  
   </div>
    
  </div>
+  <br>
+     <p id="thongbao" style="color:red"></p>
+     <br>
 	<button type="button" id="btnluuthaydoi" class="btn btn-success"> lưu thay đổi</button>
+  <a href="profile.php" style="color: red">Hủy</a>
     <hr> <hr>
  <script src="../../static/vendor/jquery/jquery.min.js"></script>
 
@@ -77,10 +79,21 @@ include('../module/config.php') ;
      var sdt= $("#txtphone").val();
      var idxa= $("#slxa").val();
      var sonha= $("#txtsonha").val();
+     var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
      if(name==""||email==""||sdt==""|| idxa=="")
      {
       $("#thongbao").html("Vui lòng nhập đủ thông tin");
      }
+      else
+        if(!sdt.match(/^\d+/)||sdt.length>20|| sdt.length<10)
+      {
+          $("#thongbao").html("Lỗi!! Số điện thoại phải là số từ 10-20 kí tự");
+      }
+      else
+        if (!mailformat.test(email))
+       {
+            $("#thongbao").html("Lỗi!! email không đúng định dạng");
+       }
      else
      {
        $.get('../module/profile/suathongtin.php',{name:name, birthday:birthday,sex:sex,email:email,phone:sdt,idxa:idxa,sonha:sonha}, function(data) {

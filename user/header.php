@@ -36,10 +36,10 @@ session_start();
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="layout/profile.php"><span class='fas fa-user-alt' style="margin-right: 5px"></span>Xem Thông Tin</a>
-            <a class="dropdown-item" href="layout/message.php?id_user=<?php echo $_SESSION['id_user'];?>"><span class="fas fa-comments" style="margin-right: 5px" ></span>Xem Tin Nhắn</a>
+            
           <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalchangepassword"><span class="fas fa-key" style="margin-right: 5px"></span> Đổi Mật Khẩu</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="module/login/xulylogout.php"><span class="fas fa-sign-out-alt" style="margin-right: 5px"></span>Đăng Xuất</a>
+          <a class="dropdown-item" href="module/login/xulylogout.php" style="color:red"><span class="fas fa-sign-out-alt" style="margin-right: 5px; "></span>Đăng Xuất</a>
         </div>
       </li>
 
@@ -117,7 +117,7 @@ session_start();
         </div> 
         <div class="modal-footer">
            <button type="submit" name="btndangnhap" id="btndangnhap" class="btn btn-primary"><span class="fas fa-sign-in-alt"></span> Đăng Nhập</button>
-           <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-undo"></i>Thoát</button>
+           <button type="button" class="btn" style="color: red" data-dismiss="modal"><i class="fas fa-undo"></i>Thoát</button>
         </div>
      </div>
    </div>
@@ -147,7 +147,7 @@ session_start();
         </div> 
         <div class="modal-footer">
            <button type="submit" id="btndoimatkhau" class="btn btn-primary"><i class="fas fa-lock"></i>OK</button>
-           <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-undo"></i>Thoát</button>
+           <button type="button" class="btn" data-dismiss="modal" style="color: red" ><i class="fas fa-undo"></i>Thoát</button>
         </div>
      </div>
    </div>
@@ -187,7 +187,7 @@ session_start();
      
       <div class="modal-footer">
         <button  type="button" id="btndangki" name="btndangki"class="btn btn-primary" ><i class=" fa fa-edit"></i>Đăng Kí</button>
-        <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-undo"></i>Thoát</button>
+        <button type="button" class="btn" data-dismiss="modal" style="color: red"><i class="fas fa-undo"></i>Thoát</button>
       </div>
     </div>
  </div>   
@@ -228,10 +228,26 @@ session_start();
       var user=$("#Re_username").val();
       var pass=$("#Re_password").val();
       var epass=$("#Re_enterpassword").val();
+      var nameRegex =/^[a-zA-Z0-9]+$/;
+      if(user==""||pass==""||epass=="")
+      {
+        $("#RE_response").html("Vui lòng nhập đầy đủ thông tin");
+      }
+      else
+        if (!user.match(nameRegex)) {
+            $("#RE_response").html("Tên đăng nhập chỉ bao gồm chữ và số");
+        }
+        else
+        if (pass!=epass) {
+           $("#RE_response").html("Xác nhận mật khẩu không đúng");
+        }
+      else
+      {
        $.post("module/login/xulydangki.php",{username:user, password:pass,enterpassword:epass}, function(data) {
          /*optional stuff to do after success */
          $("#RE_response").html(data);
        });
+     }
     });
   });
 </script>

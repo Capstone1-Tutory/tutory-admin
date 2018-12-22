@@ -13,7 +13,7 @@ include ('module/config.php');
  {
   ?>
     <div class="well">
-      <a href=""><?php echo $row['NAME'] ?></a>
+      <a href="layout/viewprofile.php?idtutor=<?php echo $row["ID_TUTOR"] ?>" ><?php echo $row['NAME'] ?></a>
         <hr>
         </div>
 
