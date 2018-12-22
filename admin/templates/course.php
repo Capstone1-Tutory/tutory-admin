@@ -153,7 +153,7 @@ if ($user) {
             <span class="glyphicon glyphicon-repeat"></span> Tải lại
             </a>
             <a class="btn btn-danger" id="del_course_list">
-            <span class="glyphicon glyphicon-trash"></span> Xóa
+            <span class="glyphicon glyphicon-trash"></span> Hủy
             </a>
          </form> 
             ';
@@ -165,7 +165,7 @@ if ($user) {
             AND T.ID_PROFILE = UP.ID_PROFILE
             AND TRM.ID_TUTOR = T.ID_TUTOR
             AND TRM.ID_MAJOR = M.ID_MAJOR
-            ORDER BY COURSE_START_DATE ASC";
+            ORDER BY C.COURSE_START_DATE ASC";
            //nếu có khóa học
             if ($db->num_rows($sql_get_list_course)) {
                 // form tìm kiếm khóa học
@@ -240,10 +240,13 @@ if ($user) {
                     <th>' . $data_course['CENTER_NAME'] . '</th>
                     <th>' . $data_course['COURSE_START_DATE'] . '</th>
                     <th>' . $data_course['COURSE_END_DATE'] . '</th>
-                    <th>' . $count_student . '/' . $data_course['QUANTITY_STUDENT'] . '</th>
+                    <th><button id="detail_student" type="submit" onclick="detail_student(' . $data_course['ID_COURSE'] . ')">
+                    <span class ="badge badge-primary badge-pill" >' . $count_student . '/' . $data_course['QUANTITY_STUDENT'] . '</span></button></th>
                     <th>' . $stt_course . '</th>
                     </tr>
+                    
                     ';
+
                 }
                 echo '</table>';
                 echo '
@@ -257,21 +260,8 @@ if ($user) {
         }
     }
 }
-
-
-
-
 // Ngược lại chưa đăng nhập
 else {
     new Redirect($_DOMAIN); // Trở về trang index
 }
-
 ?>
-<script type="text/javascript">
-    $('#selectAllCourse').click(function(e){
-        var table= $(e.target).closest('table');
-        $('th input:checkbox',table).prop('checked',this.checked);
-    });
-// Print selected rows
-</script>
-

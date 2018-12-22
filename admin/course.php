@@ -106,7 +106,9 @@ if ($user) {
         // chi tiết từng khóa học
         else if ($action == 'detail_course') {
             $id_course = trim(htmlspecialchars(addslashes($_POST['id_course'])));
-            $sql_get_list_schedule = "SELECT * FROM schedule WHERE ID_COURSE = '$id_course'";
+            $sql_get_list_schedule = "SELECT * FROM schedule WHERE ID_COURSE = '$id_course'
+            ORDER BY SCHEDULE_DATE ASC, SCHEDULE_START_TIME ASC
+            ";
             echo '<div class="form-group">
                     <div class="form-inline">
                     <a href="' . $_DOMAIN . 'course" class="btn btn-default" style="color:red">
@@ -129,7 +131,7 @@ if ($user) {
                             ';
                 // lấy chi tiết khóa học từ bảng thời khóa biểu
                 foreach ($db->fetch_assoc($sql_get_list_schedule, 0) as $key => $data_schedule) {
-                    if ($data_schedule['SCHEDULE_STATUS'] == 0) {
+                    if ($data_schedule['SCHEDULE_STATUS'] == 1) {
                         if ($data_schedule['SCHEDULE_DATE'] == getdate()) {
                             if ($data_schedule['SCHEDULE_START_TIME'] > getdate(['hours'])) {
                                 $stt_schedule = '<label class="label label-warning">Sắp diễn ra</label>';
@@ -143,7 +145,7 @@ if ($user) {
                         } else {
                             $stt_schedule = '<label class="label label-default">Đã kết thúc</label>';
                         }
-                    } else if ($data_schedule['SCHEDULE_STATUS'] == 1) {
+                    } else if ($data_schedule['SCHEDULE_STATUS'] == 2) {
                         $stt_schedule = '<label class="label label-danger">Đã hủy</label>';
                     }
                         // in ra dữ liệu
@@ -172,10 +174,11 @@ if ($user) {
                 AND TRM.ID_TUTOR = T.ID_TUTOR
                 AND TRM.ID_MAJOR = M.ID_MAJOR
                 AND (UP.NAME LIKE '%$kw_search_course%'
+                OR C.ID_COURSE LIKE '%$kw_search_course%'
                 OR M.MAJOR_NAME LIKE '%$kw_search_course%'
                 OR C.COURSE_START_DATE LIKE '%$kw_search_course%'
                 OR C.COURSE_END_DATE LIKE '%$kw_search_course%')
-                ORDER BY COURSE_START_DATE ASC
+                ORDER BY C.COURSE_START_DATE ASC
             ";
                 if ($db->num_rows($sql_search_course)) {
                     echo
@@ -200,26 +203,32 @@ if ($user) {
                     //trạng thái khóa học
                         if ($data_course['COURSE_STATUS'] == 0) {
                             $stt_course = '
-                        <a data-id="' . $data_course['ID_COURSE'] . '" class="label label-warning" id="review_course">
+                        <a class="label label-warning" id="review_course" onclick="review_course (' . $data_course['ID_COURSE'] . ')">
                         <span class="glyphicon glyphicon-ok"></span> Chưa duyệt</a>';
                         } else if ($data_course['COURSE_STATUS'] == 2) {
                             $stt_course = '<label class="label label-danger">Đã hủy</label>';
                         } else if ($data_course['COURSE_STATUS'] == 1) {
                             $today = date("Y-m-d");
                             if (strtotime($data_course['COURSE_START_DATE']) > strtotime($today)) {
-                                $stt_course = '<label class="label label-warning">Sắp diễn ra</label>';
+                                $stt_course = '<label class="label label-warning">Sắp diễn ra</label>
+                            <a class="label label-danger" id="cancel_course" onclick="cancel_course (' . $data_course['ID_COURSE'] . ')">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Hủy</a>
+                            ';
                             } else if (strtotime($data_course['COURSE_END_DATE']) < strtotime($today)) {
                                 $stt_course = '<label class="label label-default">Đã kết thúc</label>';
                             } else {
-                                $stt_course = '<label class="label label-info">Đang diễn ra</label>';
+                                $stt_course = '<label class="label label-info">Đang diễn ra</label>
+                            <a class="label label-danger" id="cancel_course" onclick="cancel_course (' . $data_course['ID_COURSE'] . ')">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Hủy</a>
+                            ';
                             }
                         }
                         echo
                             '
                     <tr>
                     <th><input type="checkbox" name="ID_COURSE[]" value="' . $data_course['ID_COURSE'] . '"></th>
-                    <th><a data-id="' . $data_course['ID_COURSE'] . '"  id="course_detail" data-toggle="modal" data-target="#list_schedule_in_course">
-                        <span class="glyphicon glyphicon-zoom-in"></span></a>
+                    <th><button id="course_detail" type="submit" onclick="detail_course(' . $data_course['ID_COURSE'] . ')">
+                        <i class="glyphicon glyphicon-zoom-in"></i></button>
                     </th>
                     <th>' . $data_course['NAME'] . '</th>
                     <th>' . $data_course['JOB'] . '</th>
@@ -227,7 +236,8 @@ if ($user) {
                     <th>' . $data_course['CENTER_NAME'] . '</th>
                     <th>' . $data_course['COURSE_START_DATE'] . '</th>
                     <th>' . $data_course['COURSE_END_DATE'] . '</th>
-                    <th>' . $count_student . '/' . $data_course['QUANTITY_STUDENT'] . '</th>
+                    <th><button id="detail_student" type="submit" onclick="detail_student(' . $data_course['ID_COURSE'] . ')">
+                    <span class ="badge badge-primary badge-pill" >' . $count_student . '/' . $data_course['QUANTITY_STUDENT'] . '</span></button></th>
                     <th>' . $stt_course . '</th>
                     </tr>
                     ';
@@ -247,9 +257,65 @@ if ($user) {
             if ($db->num_rows($sql_check_course_id_exist)) {
                 $sql_cancel_course = "UPDATE course SET COURSE_STATUS = '2' WHERE ID_COURSE = '$id_course'";
                 $db->query($sql_cancel_course);
+                $sql_cancel_schedule_in_course = "UPDATE schedule SET SCHEDULE_STATUS = '2' WHERE ID_COURSE = '$id_course'";
+                $db->query($sql_cancel_schedule_in_course);
                 $db->close();
             }
         } 
+        //chi tiết học sinh của khóa học
+        else if ($action == 'detail_student') {
+            $id_course = trim(htmlspecialchars(addslashes($_POST['id_course'])));
+            $sql_get_student_in_course = "SELECT * FROM course C, student_rela_course SRC, student S, user_profile UP
+            WHERE UP.ID_PROFILE = S.ID_PROFILE
+            AND S.ID_STUDENT = SRC.ID_STUDENT
+            AND SRC.ID_COURSE = C.ID_COURSE
+            AND C.ID_COURSE = '$id_course'
+            ORDER BY UP.NAME DESC
+            ";
+            echo '<div class="form-group">
+                    <div class="form-inline">
+                    <a href="' . $_DOMAIN . 'course" class="btn btn-default" style="color:red">
+                    <span class="glyphicon glyphicon-arrow-left" style="color:red"></span> Trở về
+                    </a>
+                    <label>Danh sách học viên</label>
+                    </div>';
+            if ($db->num_rows($sql_get_student_in_course)) {
+                echo
+                    ' 
+                    </div>
+                                                        <table class="table table-hover list">
+                                                        <tr>
+                                                        <th><strong>Họ và tên</strong></th>
+                                                        <th><strong>Địa chỉ</strong></th>
+                                                        <th><strong>Số điện thoại</strong></th>                  
+                                                        <th><strong>Địa chỉ Email</strong></th>
+                                                        <th><strong>Nghề nghiệp</strong></th>
+                                                        </tr>                                                        
+                            ';
+                // lấy chi tiết khóa học từ bảng thời khóa biểu
+                foreach ($db->fetch_assoc($sql_get_student_in_course, 0) as $key => $data_student) {
+                    $sql_address = $db->query("SELECT XA.name, H.name, TP.name FROM devvn_xaphuongthitran XA, devvn_quanhuyen H, devvn_tinhthanhpho TP
+                WHERE TP.matp = H.matp
+                AND H.maqh = XA.maqh
+                AND XA.xaid = $data_student[ID_ADDRESS]
+                ");
+                        // in ra dữ liệu
+                    echo '
+                                        <tr>
+                                            <th>' . $data_student['NAME'] . '</th>
+                                            <th>' . $data_student['SO_NHA'] . ' ' . $sql_address . '</th>
+                                            <th>' . $data_student['PHONE'] . '</th>                  
+                                            <th>' . $data_student['EMAIL'] . '</th>
+                                            <th>' . $data_student['JOB'] . '</th>
+                                        </tr>
+                                    ';
+                }
+                echo '</table>';
+            } else {
+                echo '<br><br><div class="alert alert-danger">Chưa có học viên ở khóa học này.</div>';
+
+            }
+        }
         //
         else {
             new Redirect($_DOMAIN); // Trở về trang index

@@ -54,17 +54,17 @@ if ($user) {
             echo ' tháng ' . $date['mon'];
             echo ' năm ' . $date['year'];
             echo '
-                <p>
-                <form method="POST" id="formSearchSchedule" onsubmit="return false;">
-                    <div class="input-group">         
-                        <input type="date" class="form-control" id="kw_search_schedule">
-                        <span class="input-group-btn">
-                            <button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-ok"></i></button>
-                        </span>
-                    </div>
-                </form>
-                </p>
-                ';
+                 <p>
+                 <form method="POST" id="formSearchSchedule" onsubmit="return false;">
+                     <div class="input-group">         
+                         <input type="date" class="form-control" id="kw_search_schedule">
+                         <span class="input-group-btn">
+                             <button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-ok"></i></button>
+                         </span>
+                     </div>
+                 </form>
+                 </p>
+                 ';
     // Content danh sách lịch trong ngày
             $sql_get_schedule_in_date_current = "SELECT * FROM schedule S, course C, tutor T, user_profile UP, major M
                     WHERE S.ID_COURSE = C.ID_COURSE
@@ -73,20 +73,30 @@ if ($user) {
                     AND C.ID_MAJOR = M.ID_MAJOR
                     AND date(S.SCHEDULE_DATE) = date(now())
                     ORDER BY S.SCHEDULE_START_TIME DESC";
-
+            echo '<div id="list_schedule">';
             if ($db->num_rows($sql_get_schedule_in_date_current)) {
                 echo
                     '
-                        <div class="table-responsive"  id="list_schedule">
+                        <div class="table-responsive">
                         <table class="table table-hover list">
                         <tr>
                         <th><strong>Thời gian</strong></th>
                         <th><strong>Địa điểm</strong></th>                  
                         <th><strong>Gia sư</strong></th>
                         <th><strong>Môn học</strong></th>
+                        <th><strong>Tình trạng</strong></th>
                         </tr>
                     ';
                 foreach ($db->fetch_assoc($sql_get_schedule_in_date_current, 0) as $key => $data_schedule) {
+                    if ($data_schedule['SCHEDULE_STATUS'] == 1) {
+                        $stt_schedule = '
+                        <a class="label label-warning" id="cancel_schedule" onclick="cancel_schedule (' . $data_schedule['ID_SCHEDULE'] . ')">
+                        <span class="glyphicon glyphicon-remove-sign"></span> Hủy</a>
+                        ';
+                    } else if ($data_schedule['SCHEDULE_STATUS'] == 2) {
+                        $stt_schedule = '<label class="label label-danger">Đã hủy</label>
+                        ';
+                    }
                     echo
                         '
             <tr>
@@ -94,6 +104,7 @@ if ($user) {
             <th>' . $data_schedule['PLACE'] . '</th>
             <th>' . $data_schedule['NAME'] . '</th>
             <th>' . $data_schedule['MAJOR_NAME'] . '</th>
+            <th>' . $stt_schedule . '</th>
             </tr>
             ';
                 }
@@ -101,6 +112,7 @@ if ($user) {
                 echo
                     '
         </table>
+        </div>
         </div>
         ';
             } else {
