@@ -85,7 +85,7 @@ if ($user) {
                 <span class="glyphicon glyphicon-repeat"></span> Reload
             </a> 
             <a class="btn btn-danger" id="del_topic_list">
-                <span class="glyphicon glyphicon-trash"></span> Xoá
+                <span class="glyphicon glyphicon-trash"></span> Hủy
             </a> 
             </form>          
         ';
@@ -187,12 +187,3 @@ else {
 }
 
 ?>
-
-<script type="text/javascript">
-    $('#selectAllTopic').click(function(e){
-        var table= $(e.target).closest('table');
-        $('th input:checkbox',table).prop('checked',this.checked);
-    });
-// Print selected rows
-
-</script>

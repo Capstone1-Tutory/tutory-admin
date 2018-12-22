@@ -21,7 +21,6 @@ if ($user) {
         } else {
             $id = '';
         }
-
         // Nếu có tham số ac
         if ($ac != '') {
             // Trang thêm tài khoản
@@ -78,17 +77,15 @@ if ($user) {
             <a href="' . $_DOMAIN . 'account" class="btn btn-default">
             <span class="glyphicon glyphicon-repeat"></span> Tải lại
             </a>
-            <a class="btn btn-danger" id="del_acc_list">
+            <a class="btn btn-danger" id="del_acc">
             <span class="glyphicon glyphicon-trash"></span> Xóa
             </a>              
             </form>     
             ';
-
             // Content danh sách tài khoản
             $sql_get_list_acc = "SELECT * FROM user_account UA, user_profile UP
             WHERE UA.ID_USER = UP.ID_USER
             ORDER BY UP.STATUS DESC, UA.ID_TYPE ASC";
-
             // Nếu có tài khoản
             if ($db->num_rows($sql_get_list_acc)) {
                 //tìm kiếm tài khoản
@@ -116,7 +113,6 @@ if ($user) {
                 <th><strong>Trạng thái</strong></th>
                 </tr>
                 ';
-
             // In danh sách tài khoản
                 foreach ($db->fetch_assoc($sql_get_list_acc, 0) as $key => $data_acc) {
 
@@ -130,12 +126,7 @@ if ($user) {
                         } else {
                             $role_acc = '<label class="label label-default">Người dùng</label>';
                         }
-                    }
-                    
-                
-                    
-                    
-                    
+                    }                 
                 // Trạng thái tài khoản
                     if ($data_acc['STATUS'] == 0) {
                         $stt_acc = '<label class="label label-default">Ngoại tuyến</label>';
@@ -169,20 +160,9 @@ if ($user) {
         }
     }
 }
-
-
-
 // Ngược lại chưa đăng nhập
 else {
     new Redirect($_DOMAIN); // Trở về trang index
 }
 
 ?>
-<script type="text/javascript">
-    $('#selectAllAccount').click(function(e){
-        var table= $(e.target).closest('table');
-        $('th input:checkbox',table).prop('checked',this.checked);
-    });
-// Print selected rows
-
-</script>

@@ -97,13 +97,16 @@ if ($user) {
 
                         if ($data_topic['STATUS'] == 0) {
                             $stt_topic = ' 
-                    <a data-id="' . $data_topic['NEWS_ID'] . '" class="label label-warning" id="review_topic">
+                    <a onclick="review_topic(' . $data_topic['NEWS_ID'] . ')" class="label label-warning" id="review_topic">
                     <span class="glyphicon glyphicon-ok"></span> Chưa duyệt</a>
                     ';
                         } else if ($data_topic['STATUS'] == 1) {
-                            $stt_topic = '<label class="label label-primary">Đã duyệt</label>';
+                            $stt_topic = '<label class="label label-primary">Đã duyệt</label>
+                    <a onclick="cancel_topic(' . $data_topic['NEWS_ID'] . ')" class="label label-danger" id="cancel_topic">
+                    <span class="glyphicon glyphicon-remove-sign"></span> Hủy</a>
+                    ';
                         } else if ($data_topic['STATUS'] == 2) {
-                            $stt_topic = '<label class="label label-default">Đã hủy</label>';
+                            $stt_topic = '<label class="label label-danger">Đã hủy</label>';
                         }
                         $sql_get_editor = "SELECT * FROM editor E, user_account UA, user_profile UP, type_user TU
                     WHERE $data_topic[PARTY_ROLE_TYPE_ID_FROM] = E.PARTY_ID

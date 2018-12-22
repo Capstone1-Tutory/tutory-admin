@@ -90,8 +90,33 @@ if ($user) {
                         <input type="date" class="form-control" id="birthday_update" value="' . $data_user['BIRTHDAY'] . '">
                         </div>
                         <div class="form-group">
-                        <label>Địa chỉ</label>
-                        <input type="text" class="form-control" id="address_update" value="' . $data_user['SO_NHA'] . '">
+                <label>Địa điểm</label>
+                <div class="form-inline">
+                    <select class="form-control title" id="city_update" style="width:324px">
+                    <option value="">Tỉnh/Thành phố</option>
+                    ';
+                $sql_get_city = "SELECT * FROM devvn_tinhthanhpho
+                    ";
+                if ($db->num_rows($sql_get_city)) {
+                    foreach ($db->fetch_assoc($sql_get_city, 0) as $key => $data_city) {
+                        echo '
+                                <option value="' . $data_city['matp'] . '">' . $data_city['name'] . '</option>
+                            ';
+                    }
+                }
+                echo '
+                    </select>
+                    <select class="form-control title" id="district_update" style="width:324px">
+                    <option value="">Quận/Huyện</option>
+                    </select>
+                    <select class="form-control title" id="commune_update" style="width:324px">
+                    <option value="">Xã/Phường</option>
+                    </select>
+                </div>
+                </div>
+                <div class="form-group">
+                <input type="text" class="form-control title" id="street_update" value="' . $data_user['SO_NHA'] . '">
+                </div>
                         <br>
                         <div class="form-group">
                         <div class="form-inline">
@@ -138,6 +163,9 @@ if ($user) {
         } 
         // Ngược lại không có tham số ac
         else {
+            $sql_address_commune = $db->query("SELECT name FROM devvn_xaphuongthitran
+                WHERE xaid = $data_user[ID_ADDRESS]
+                ");
             echo
                 '
                     <div class="panel panel-default">
@@ -151,7 +179,7 @@ if ($user) {
                     </br>&nbsp;
                     <label>Giới tính: ' . $data_user['SEX'] . '</label>
                     </br>&nbsp;
-                    <label>Địa chỉ: ' . $data_user['SO_NHA'] . '</label>
+                    <label>Địa chỉ: ' . $data_user['SO_NHA'] . ' ' . $sql_address_commune . '</label>
                     </br>&nbsp;
                     <label>Số điện thoại: ' . $data_user['PHONE'] . '</label>
                     </br>&nbsp;

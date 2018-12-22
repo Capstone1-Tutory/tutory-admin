@@ -132,9 +132,9 @@ $('#formUpdateInfo button').on('click', function () {
     $email_update = $('#email_update').val();
     $phone_update = $('#phone_update').val();
     $birthday_update = $('#birthday_update').val();
-    $address_update = $('#address_update').val();
-
-    if ($name_update && $email_update && $phone_update && $birthday_update && $address_update) {
+    $street_update = $('#street_update').val();
+    $commune_update = $('#commune_update').val();
+    if ($name_update && $email_update && $phone_update && $birthday_update && $street_update && $commune_update) {
         $.ajax({
             url: $_DOMAIN + 'profile.php',
             type: 'POST',
@@ -143,7 +143,8 @@ $('#formUpdateInfo button').on('click', function () {
                 email_update: $email_update,
                 phone_update: $phone_update,
                 birthday_update: $birthday_update,
-                address_update: $address_update,
+                commune_update: $commune_update,
+                street_update: $street_update,
                 action: 'up_profile'
             }, success: function (data) {
                 $('#formUpdateInfo .alert').removeClass('hidden');
@@ -221,7 +222,7 @@ $('#formAddAcc button').on('click', function () {
     }
 });
 // Xoá nhiều tài khoản cùng lúc
-$('#del_acc_list').on('click', function () {
+$('#del_acc').on('click', function () {
     $confirm = confirm('Bạn có chắc chắn muốn xoá các tài khoản đã chọn không?');
     if ($confirm == true) {
         $id_user = [];
@@ -239,7 +240,7 @@ $('#del_acc_list').on('click', function () {
                 type: 'POST',
                 data: {
                     id_user: $id_user,
-                    action: 'del_acc_list'
+                    action: 'del_acc'
                 },
                 success: function (data) {
                     $('#list_acc').html(data);
@@ -248,28 +249,6 @@ $('#del_acc_list').on('click', function () {
                 }
             });
         }
-    }
-    else {
-        return false;
-    }
-});
-// Xoá tài khoản chỉ định trong bảng danh sách
-$('.del-acc').on('click', function () {
-    $confirm = confirm('Bạn có chắc chắn muốn xoá tài khoản này không?');
-    if ($confirm == true) {
-        $id_user = $(this).attr('data-id');
-
-        $.ajax({
-            url: $_DOMAIN + 'account.php',
-            type: 'POST',
-            data: {
-                id_user: $id_user,
-                action: 'del_acc'
-            },
-            success: function () {
-                location.reload();
-            }
-        });
     }
     else {
         return false;
@@ -309,6 +288,22 @@ $('#city_add_course').on('click', function () {
         }
     });
 });
+$('#city_update').on('click', function () {
+    $matp = $('#city_update').val();
+    $.ajax({
+        url: $_DOMAIN + 'profile.php',
+        type: 'POST',
+        data: {
+            matp: $matp,
+            action: 'load_city'
+        },
+        success: function (data) {
+            $('#district_update').html(data);
+        }, error: function () {
+            alert('Lỗi!');
+        }
+    });
+});
 $('#district_add_course').on('click', function () {
     $maqh = $('#district_add_course').val();
     $.ajax({
@@ -320,6 +315,22 @@ $('#district_add_course').on('click', function () {
         },
         success: function (data) {
             $('#commune_add_course').html(data);
+        }, error: function () {
+            alert('Lỗi!');
+        }
+    });
+});
+$('#district_update').on('click', function () {
+    $maqh = $('#district_update').val();
+    $.ajax({
+        url: $_DOMAIN + 'profile.php',
+        type: 'POST',
+        data: {
+            maqh: $maqh,
+            action: 'load_district'
+        },
+        success: function (data) {
+            $('#commune_update').html(data);
         }, error: function () {
             alert('Lỗi!');
         }
@@ -473,6 +484,42 @@ function detail_course(idcourse) {
             $('#list_course').html(data);
         }
     });
+}
+//chi tiết học viên
+function detail_student(idcourse) {
+    $.ajax({
+        url: $_DOMAIN + 'course.php',
+        type: 'POST',
+        data: {
+            id_course: idcourse,
+            action: 'detail_student'
+        }, success: function (data) {
+            $('#list_course').html(data);
+        }
+    });
+}
+//hủy lịch
+function cancel_schedule(idschedule) {
+    $confirm = confirm('Bạn có muốn hủy lịch học này không?');
+    if ($confirm == true) {
+        $.ajax({
+            url: $_DOMAIN + 'schedule.php',
+            type: 'POST',
+            data: {
+                id_schedule: idschedule,
+                action: 'cancel_schedule'
+            },
+            success: function () {
+                location.reload();
+                alert('Hủy thành công.');
+            }, error: function () {
+                alert('Không thể hủy vào lúc này, vui lòng thử lại sau.');
+            }
+        });
+    }
+    else {
+        return false;
+    }
 }
 // tìm kiếm 
 $('#formSearchCourse button').on('click', function () {

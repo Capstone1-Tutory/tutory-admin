@@ -53,28 +53,16 @@ if ($user) {
         }
         // Xoá tài khoản
         // Xoá nhiều tài khoản cùng lúc     
-        else if ($action == 'del_acc_list') {
+        else if ($action == 'del_acc') {
             foreach ($_POST['id_user'] as $key => $id_user) {
                 $sql_check_ID_USER_exist = "SELECT ID_USER FROM user_acount UA, user_profile UP WHERE UA.ID_USER = '$id_user' AND UA.ID_USER = UP.ID_USER";
                 if ($db->num_rows($sql_check_ID_USER_exist)) {
-                    $sql_del_acc = "DELETE FROM user_profile WHERE ID_USER = '$id_user'";
+                    $sql_del_acc = "DELETE  user_account, user_profile FROM user_account, user_profile WHERE user_account.ID_USER = user_profile.ID_USER AND user_account.ID_USER = '$id_user'";
                     $db->query($sql_del_acc);
-                    $sql_del_account = "DELETE FROM user_acount WHERE ID_USER = '$id_user'";
-                    $db->query($sql_del_account);
                 }
             }
             $db->close();
         }
-    // Xoá 1 tài khoản
-        else if ($action == 'del_acc') {
-            $id_user = trim(htmlspecialchars(addslashes($_POST['id_user'])));
-            $sql_check_ID_USER_exist = "SELECT ID_USER FROM user_acount UA, user_profile UP WHERE UA.ID_USER = '$id_user' AND UA.ID_USER = UP.ID_USER";
-            if ($db->num_rows($sql_check_ID_USER_exist)) {
-                $sql_del_acc = "DELETE FROM user_acount UA, user_profile UP WHERE UA.ID_USER = '$id_user' AND UA.ID_USER = UP.ID_USER";
-                $db->query($sql_del_acc);
-                $db->close();
-            }
-        } 
         //tìm kiếm tài khoản
         else if ($action == 'search_acc') {
             $kw_search_acc = trim(htmlspecialchars(addslashes($_POST['kw_search_acc'])));
@@ -134,14 +122,16 @@ if ($user) {
                 </table>
                 ';
                 }
-// Nếu không có tài khoản
+            // Nếu không có tài khoản
                 else {
                     echo '<br><br><div class="alert alert-danger">Không tìm thấy tài khoản nào.</div>';
                 }
             } else {
                 echo '<br><br><div class="alert alert-danger">Vui lòng nhập từ khóa.</div>';
             }
-        } else {
+        } 
+        //
+        else {
             new Redirect($_DOMAIN); // Trở về trang index
         }
     }

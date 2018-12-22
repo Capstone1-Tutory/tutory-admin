@@ -55,6 +55,36 @@ if ($user) {
             $db->query($sql_delete_avt);
             $db->close();
         }
+        // load huyện
+        else if ($action == 'load_city') {
+            // Xử lý giá trị
+            $matp = trim(addslashes(htmlspecialchars($_POST['matp'])));
+            $sql_name_district = "SELECT * FROM devvn_quanhuyen
+                WHERE matp = '$matp'
+                ";
+            if ($db->num_rows($sql_name_district)) {
+                foreach ($db->fetch_assoc($sql_name_district, 0) as $key => $name_district)
+
+                    echo '
+                        <option value="' . $name_district['maqh'] . '">' . $name_district['name'] . '</option>
+                        ';
+            }
+        } 
+        // load xã
+        else if ($action == 'load_district') {
+            // Xử lý giá trị
+            $maqh = trim(addslashes(htmlspecialchars($_POST['maqh'])));
+            $sql_name_commune = "SELECT * FROM devvn_xaphuongthitran
+                WHERE maqh = '$maqh'
+                ";
+            if ($db->num_rows($sql_name_commune)) {
+                foreach ($db->fetch_assoc($sql_name_commune, 0) as $key => $name_commune)
+
+                    echo '
+                        <option value="' . $name_commune['xaid'] . '">' . $name_commune['name'] . '</option>
+                        ';
+            }
+        }
         // Cập nhật các thông tin 
         else if ($action == 'up_profile') {
     // Xử lý các giả trị
@@ -62,14 +92,15 @@ if ($user) {
             $email_update = trim(htmlspecialchars(addslashes($_POST['email_update'])));
             $phone_update = trim(htmlspecialchars(addslashes($_POST['phone_update'])));
             $birthday_update = trim(htmlspecialchars(addslashes($_POST['birthday_update'])));
-            $address_update = trim(htmlspecialchars(addslashes($_POST['address_update'])));
+            $street_update = trim(htmlspecialchars(addslashes($_POST['street_update'])));
+            $commune_update = trim(htmlspecialchars(addslashes($_POST['commune_update'])));
         
     // Các biến xử lý thông báo
             $show_alert = '<script>$("#formUpdateInfo .alert").removeClass("hidden");</script>';
             $hide_alert = '<script>$("#formUpdateInfo .alert").addClass("hidden");</script>';
             $success = '<script>$("#formUpdateInfo .alert").attr("class", "alert alert-success");</script>';
 
-            if ($name_update && $email_update && $phone_update && $birthday_update && $address_update) {
+            if ($name_update && $email_update && $phone_update && $birthday_update && $street_update && $commune_update) {
         // Kiểm tra tên hiển thị
                 if (strlen($name_update) < 3 || strlen($name_update) > 50) {
                     echo $show_alert . 'Họ và tên phải từ 3 đến 50 ký tự.';
@@ -87,7 +118,9 @@ if ($user) {
                 EMAIL = '$email_update',
                 PHONE = '$phone_update',
                 BIRTHDAY = '$birthday_update',
-                SO_NHA = '$address_update'
+                SO_NHA = '$street_update',
+                ID_ADDRESS = '$commune_update'
+                ''
                 WHERE ID_PROFILE = '$data_user[ID_PROFILE]'
                 ";
                     $db->query($sql_update_info);
