@@ -17,7 +17,7 @@ session_start();
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
       <div class="container">
-        <a class="navbar-brand" id="logo" href="#">Tutory</a>
+        <a class="navbar-brand" id="logo" href="#">ONLINE TUTORY</a>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             
@@ -228,8 +228,8 @@ session_start();
       var user=$("#Re_username").val();
       var pass=$("#Re_password").val();
       var epass=$("#Re_enterpassword").val();
-      var nameRegex = /^[A-Za-z][0-9_\.]{6,32}$/;
-      var passRegex=/^([A-Za-z0-9])([\w_\.!@#$%^&*()]+){5,31}$/;
+      var nameRegex = /^[A-Za-z][A-Za-z0-9_\.]{6,32}/;
+      var passRegex=/^([A-Za-z0-9])([\w_\.!@#$%^&*()]+){5,31}/;
       if(user==""||pass==""||epass=="")
       {
         $("#RE_response").html("Vui lòng nhập đầy đủ thông tin");

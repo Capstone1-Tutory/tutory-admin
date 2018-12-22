@@ -14,6 +14,8 @@
      {
         $_SESSION["login_username"]=$row['USER_NAME'];
         $_SESSION["id_user"]=$row["ID_USER"];
+        $sqlonline= "update user_profile SET STATUS=1 where ID_USER='{$row["ID_USER"]}'";
+        $resultonline=mysqli_query($conn,$sqlonline);
      }
     echo $count;
 

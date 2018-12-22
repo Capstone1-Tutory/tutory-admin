@@ -27,7 +27,9 @@
 <body>
    <div class="container">
    <nav class="navbar navbar-dark bg-primary">
-   	 <a class="navbar-brand" id="logo" href="../index.php">TUTORY</a>
+   	 <a class="navbar-brand" id="logo" href="../index.php" style="font-size: 25px;
+        font-style: italic;
+        font-family: Verdana;">ONLINE TUTORY</a>
    </nav>
   	<div class="row content">
      <div class="col-sm-2">
