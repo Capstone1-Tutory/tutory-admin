@@ -207,7 +207,7 @@ if ($user) {
                     //trạng thái khóa học
                     if ($data_course['COURSE_STATUS'] == 0) {
                         $stt_course = '
-                        <a data-id="' . $data_course['ID_COURSE'] . '" class="label label-warning" id="review_course">
+                        <a class="label label-warning" id="review_course" onclick="review_course (' . $data_course['ID_COURSE'] . ')">
                         <span class="glyphicon glyphicon-ok"></span> Chưa duyệt</a>';
                     } else if ($data_course['COURSE_STATUS'] == 2) {
                         $stt_course = '<label class="label label-danger">Đã hủy</label>';
@@ -215,14 +215,14 @@ if ($user) {
                         $today = date("Y-m-d");
                         if (strtotime($data_course['COURSE_START_DATE']) > strtotime($today)) {
                             $stt_course = '<label class="label label-warning">Sắp diễn ra</label>
-                            <a data-id="' . $data_course['ID_COURSE'] . '" class="label label-danger" id="cancel_course">
+                            <a class="label label-danger" id="cancel_course" onclick="cancel_course (' . $data_course['ID_COURSE'] . ')">
                             <span class="glyphicon glyphicon-remove-sign"></span> Hủy</a>
                             ';
                         } else if (strtotime($data_course['COURSE_END_DATE']) < strtotime($today)) {
                             $stt_course = '<label class="label label-default">Đã kết thúc</label>';
                         } else {
                             $stt_course = '<label class="label label-info">Đang diễn ra</label>
-                            <a data-id="' . $data_course['ID_COURSE'] . '" class="label label-danger" id="cancel_course">
+                            <a class="label label-danger" id="cancel_course" onclick="cancel_course (' . $data_course['ID_COURSE'] . ')">
                             <span class="glyphicon glyphicon-remove-sign"></span> Hủy</a>
                             ';
                         }
@@ -231,7 +231,7 @@ if ($user) {
                         '
                     <tr>
                     <th><input type="checkbox" name="ID_COURSE[]" value="' . $data_course['ID_COURSE'] . '"></th>
-                    <th><button data-id="' . $data_course['ID_COURSE'] . '"  id="course_detail" type="submit">
+                    <th><button id="course_detail" type="submit" onclick="detail_course(' . $data_course['ID_COURSE'] . ')">
                         <i class="glyphicon glyphicon-zoom-in"></i></button>
                     </th>
                     <th>' . $data_course['NAME'] . '</th>

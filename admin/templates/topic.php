@@ -127,12 +127,12 @@ if ($user) {
             foreach ($db->fetch_assoc($sql_get_topic, 0) as $key => $data_topic) {
                 if ($data_topic['STATUS'] == 0) {
                     $stt_topic = ' 
-                    <a data-id="' . $data_topic['NEWS_ID'] . '" class="label label-warning" id="review_topic">
+                    <a onclick="review_topic(' . $data_topic['NEWS_ID'] . ')" class="label label-warning" id="review_topic">
                     <span class="glyphicon glyphicon-ok"></span> Chưa duyệt</a>
                     ';
                 } else if ($data_topic['STATUS'] == 1) {
                     $stt_topic = '<label class="label label-primary">Đã duyệt</label>
-                    <a data-id="' . $data_topic['NEWS_ID'] . '" class="label label-danger" id="cancel_topic">
+                    <a onclick="cancel_topic(' . $data_topic['NEWS_ID'] . ')" class="label label-danger" id="cancel_topic">
                     <span class="glyphicon glyphicon-remove-sign"></span> Hủy</a>
                     ';
                 } else if ($data_topic['STATUS'] == 2) {

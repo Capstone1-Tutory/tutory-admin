@@ -1,4 +1,4 @@
-<div class="panel col-md-3">
+<div class="list-group list-group-flush col-md-3">
     <li class="list-group-item list-group-item-info">
         <center>QUẢN TRỊ VIÊN</center>  
     </li>
@@ -39,9 +39,11 @@
 </a>
 <a class="list-group-item " href="<?php echo $_DOMAIN; ?>course">
     <span class="glyphicon glyphicon-edit"></span> Quản lý khóa học
+    <span class="badge badge-primary badge-pill"><?php echo $db->num_rows("SELECT * FROM course WHERE COURSE_STATUS = '0'"); ?></span>
 </a>
 <a class="list-group-item " href="<?php echo $_DOMAIN; ?>topic">
     <span class="glyphicon glyphicon-tasks"></span> Quản lý bài viết
+    <span class="badge badge-primary badge-pill"><?php echo $db->num_rows("SELECT * FROM news WHERE STATUS = '0'"); ?></span>
 </a>
 <a class="list-group-item " href="<?php echo $_DOMAIN; ?>schedule">
     <span class="glyphicon glyphicon-list-alt"></span> Quản lý thời gian biểu

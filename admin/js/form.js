@@ -1,5 +1,4 @@
 $_DOMAIN = 'http://localhost/tutory-admin/admin/';
-
 // Đăng nhập
 $('#formSignin button').on('click', function () {
     $this = $('#formSignin button');
@@ -35,7 +34,6 @@ $('#formSignin button').on('click', function () {
         });
     }
 });
-
 // Xem ảnh avatar trước
 function preUpAvt() {
     img_avt = $('#img_avt').val();
@@ -127,8 +125,6 @@ $('#del_avt').on('click', function () {
         return false;
     }
 });
-
-
 // Cập nhật thông tin khác
 $('#formUpdateInfo button').on('click', function () {
     $('#formUpdateInfo button').html('Đang tải ...');
@@ -224,7 +220,6 @@ $('#formAddAcc button').on('click', function () {
         });
     }
 });
-
 // Xoá nhiều tài khoản cùng lúc
 $('#del_acc_list').on('click', function () {
     $confirm = confirm('Bạn có chắc chắn muốn xoá các tài khoản đã chọn không?');
@@ -377,16 +372,15 @@ $('#formAddCourse button').on('click', function () {
         });
     }
 });
-// duyệt bài viết
-$('#review_topic').on('click', function () {
+//duyệt bài viết
+function review_topic(newid) {
     $confirm = confirm('Bạn có muốn duyệt bài viết này không?');
     if ($confirm == true) {
-        $news_id = $(this).attr('data-id');
         $.ajax({
             url: $_DOMAIN + 'topic.php',
             type: 'POST',
             data: {
-                news_id: $news_id,
+                news_id: newid,
                 action: 'review_topic'
             },
             success: function () {
@@ -397,21 +391,62 @@ $('#review_topic').on('click', function () {
             }
         });
     }
+}
+// hủy bài viết
+function cancel_topic(newid) {
+    $confirm = confirm('Bạn có muốn hủy bài viết này không?');
+    if ($confirm == true) {
+        $.ajax({
+            url: $_DOMAIN + 'topic.php',
+            type: 'POST',
+            data: {
+                id_topic: newid,
+                action: 'cancel_topic'
+            },
+            success: function () {
+                location.reload();
+                alert('Hủy thành công.');
+            }, error: function () {
+                alert('Không thể hủy vào lúc này, vui lòng thử lại sau.');
+            }
+        });
+    }
     else {
         return false;
     }
-});
-
-// duyệt khóa học
-$('#review_course').on('click', function () {
-    $confirm = confirm('Bạn có muốn duyệt khóa học này không?');
+}
+// hủy khóa học
+function cancel_course(idcourse) {
+    $confirm = confirm('Bạn có muốn hủy khóa học này không?');
     if ($confirm == true) {
-        $id_course = $(this).attr('data-id');
         $.ajax({
             url: $_DOMAIN + 'course.php',
             type: 'POST',
             data: {
-                id_course: $id_course,
+                id_course: idcourse,
+                action: 'cancel_course'
+            },
+            success: function () {
+                location.reload();
+                alert('Hủy thành công.');
+            }, error: function () {
+                alert('Không thể hủy vào lúc này, vui lòng thử lại sau.');
+            }
+        });
+    }
+    else {
+        return false;
+    }
+}
+// duyệt khóa học
+function review_course(idcourse) {
+    $confirm = confirm('Bạn có muốn duyệt khóa học này không?');
+    if ($confirm == true) {
+        $.ajax({
+            url: $_DOMAIN + 'course.php',
+            type: 'POST',
+            data: {
+                id_course: idcourse,
                 action: 'review_course'
             },
             success: function () {
@@ -425,23 +460,20 @@ $('#review_course').on('click', function () {
     else {
         return false;
     }
-});
-
-// chi tiết khóa học
-$('#course_detail').on('click', function () {
-    $id_course = $(this).attr('data-id');
+}
+//chi tiết khóa học
+function detail_course(idcourse) {
     $.ajax({
         url: $_DOMAIN + 'course.php',
         type: 'POST',
         data: {
-            id_course: $id_course,
+            id_course: idcourse,
             action: 'detail_course'
         }, success: function (data) {
             $('#list_course').html(data);
         }
     });
-});
-
+}
 // tìm kiếm 
 $('#formSearchCourse button').on('click', function () {
     $kw_search_course = $('#kw_search_course').val();
@@ -488,7 +520,6 @@ $('#formSearchTopic button').on('click', function () {
         });
     }
 });
-
 // tìm lịch theo ngày
 $('#formSearchSchedule button').on('click', function () {
     $kw_search_schedule = $('#kw_search_schedule').val();
@@ -505,9 +536,7 @@ $('#formSearchSchedule button').on('click', function () {
         });
     }
 });
-
 // thêm bài viết
-
 $('#formAddTopic button').on('click', function () {
     $title_add_topic = $('#title_add_topic').val();
     $category_add_topic = $('#category_add_topic').val();
@@ -532,54 +561,5 @@ $('#formAddTopic button').on('click', function () {
                 $('#formAddTopic .alert').html('Đã xảy ra lỗi, vui lòng thử lại sau.');
             }
         });
-    }
-});
-
-// hủy khóa học và hủy bài viết
-$('#cancel_course').on('click', function () {
-    $confirm = confirm('Bạn có muốn hủy khóa học này không?');
-    if ($confirm == true) {
-        $id_course = $(this).attr('data-id');
-        $.ajax({
-            url: $_DOMAIN + 'course.php',
-            type: 'POST',
-            data: {
-                id_course: $id_course,
-                action: 'cancel_course'
-            },
-            success: function () {
-                location.reload();
-                alert('Hủy thành công.');
-            }, error: function () {
-                alert('Không thể hủy vào lúc này, vui lòng thử lại sau.');
-            }
-        });
-    }
-    else {
-        return false;
-    }
-});
-
-$('#cancel_topic').on('click', function () {
-    $confirm = confirm('Bạn có muốn hủy bài viết này không?');
-    if ($confirm == true) {
-        $id_topic = $(this).attr('data-id');
-        $.ajax({
-            url: $_DOMAIN + 'topic.php',
-            type: 'POST',
-            data: {
-                id_topic: $id_topic,
-                action: 'cancel_topic'
-            },
-            success: function () {
-                location.reload();
-                alert('Hủy thành công.');
-            }, error: function () {
-                alert('Không thể hủy vào lúc này, vui lòng thử lại sau.');
-            }
-        });
-    }
-    else {
-        return false;
     }
 });

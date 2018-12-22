@@ -9,10 +9,10 @@ class DB
         $username = 'tutory',
         $password = 'tutory',
         $dbname = 'ONLINE_TUTOR_SYSTEM';
-    /*private $hostname = 'localhost',
-            $username = 'root',
-            $password = '',
-            $dbname = 'ONLINE_TUTOR_SYSTEM';*/
+    // private $hostname = 'localhost',
+    //     $username = 'root',
+    //     $password = '',
+    //     $dbname = 'ONLINE_TUTOR_SYSTEM';
  
     // Biến lưu trữ kết nối
     public $cn = null;

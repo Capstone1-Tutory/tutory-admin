@@ -70,11 +70,13 @@ if ($user) {
             $hide_alert = '<script>$("#formAddCourse .alert").addClass("hidden");</script>';
             $success = '<script>$("#formAddCourse .alert").attr("class", "alert alert-success");</script>';
             // nếu gia sư đó chưa từng dạy lớp nào
-            $sql_check_tutor = "SELECT ID_TUTOR FROM course";
+            //$sql_check_tutor = "SELECT ID_TUTOR FROM course";
             if ($major_add_course == '' || $tutor_add_course == '' || $street_add_course == '' || $quantity_add_course == ''
                 || $startdate_add_course == '' || $enddate_add_course == '' || $starttime_add_course == '' || $endtime_add_course == '') {
                 echo $show_alert . 'Vui lòng điền đầy đủ thông tin.';
-            } else if ($sql_check_tutor != $tutor_add_course) {
+            } else if ($quantity_add_course <= 0 && $quantity_add_course > 10) {
+                echo $show_alert . 'Số lượng học viên không đúng';
+            } else {
 
                 $sql_add_course = "INSERT INTO course VALUES(
                     '',
@@ -105,16 +107,16 @@ if ($user) {
         else if ($action == 'detail_course') {
             $id_course = trim(htmlspecialchars(addslashes($_POST['id_course'])));
             $sql_get_list_schedule = "SELECT * FROM schedule WHERE ID_COURSE = '$id_course'";
-            if ($db->num_rows($sql_get_list_schedule)) {
-                echo
-                    ' 
-                    <div class="form-group">
+            echo '<div class="form-group">
                     <div class="form-inline">
                     <a href="' . $_DOMAIN . 'course" class="btn btn-default" style="color:red">
                     <span class="glyphicon glyphicon-arrow-left" style="color:red"></span> Trở về
                     </a>
                     <label>Chi tiết khóa học</label>
-                    </div>
+                    </div>';
+            if ($db->num_rows($sql_get_list_schedule)) {
+                echo
+                    ' 
                     </div>
                                                         <table class="table table-hover list">
                                                         <tr>
@@ -157,7 +159,7 @@ if ($user) {
                 }
                 echo '</table>';
             } else {
-                echo '<br><br><div class="alert alert-info">Chưa có lịch học cho khóa học này.</div>';
+                echo '<br><br><div class="alert alert-danger">Chưa có lịch ở khóa học này.</div>';
             }
         }
         // tìm kiếm khóa học
@@ -232,10 +234,10 @@ if ($user) {
                     }
                     echo '</table>';
                 } else {
-                    echo '<br><br><div class="alert alert-info">Không tìm thấy khóa học nào.</div>';
+                    echo '<br><br><div class="alert alert-danger">Không tìm thấy khóa học nào.</div>';
                 }
             } else {
-                echo '<br><br><div class="alert alert-info">Vui lòng nhập từ khóa.</div>';
+                echo '<br><br><div class="alert alert-danger">Vui lòng nhập từ khóa.</div>';
             }
         } 
         // hủy khóa học
@@ -247,10 +249,14 @@ if ($user) {
                 $db->query($sql_cancel_course);
                 $db->close();
             }
-        } else {
+        } 
+        //
+        else {
             new Redirect($_DOMAIN); // Trở về trang index
         }
     }
-} else {
+} 
+//
+else {
     new Redirect($_DOMAIN); // Trở về trang index
 }
