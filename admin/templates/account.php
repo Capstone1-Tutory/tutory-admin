@@ -77,7 +77,7 @@ if ($user) {
             <a href="' . $_DOMAIN . 'account" class="btn btn-default">
             <span class="glyphicon glyphicon-repeat"></span> Tải lại
             </a>
-            <a class="btn btn-danger" id="del_acc">
+            <a class="btn btn-danger" id="del_acc_list">
             <span class="glyphicon glyphicon-trash"></span> Xóa
             </a>              
             </form>     
@@ -85,7 +85,7 @@ if ($user) {
             // Content danh sách tài khoản
             $sql_get_list_acc = "SELECT * FROM user_account UA, user_profile UP
             WHERE UA.ID_USER = UP.ID_USER
-            ORDER BY UP.STATUS DESC, UA.ID_TYPE ASC";
+            ORDER BY UA.ID_TYPE ASC";
             // Nếu có tài khoản
             if ($db->num_rows($sql_get_list_acc)) {
                 //tìm kiếm tài khoản
@@ -129,9 +129,20 @@ if ($user) {
                     }                 
                 // Trạng thái tài khoản
                     if ($data_acc['STATUS'] == 0) {
-                        $stt_acc = '<label class="label label-default">Ngoại tuyến</label>';
+                        $stt_acc = '<label class="label label-default">Ngoại tuyến</label>
+                            <a class="label label-danger" id="ban_acc" onclick="ban_acc (' . $data_acc['ID_PROFILE'] . ')">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Khóa</a>
+                            ';
                     } else if ($data_acc['STATUS'] == 1) {
-                        $stt_acc = '<label class="label label-success">Trực tuyến</label>';
+                        $stt_acc = '<label class="label label-success">Trực tuyến</label>
+                            <a class="label label-danger" id="ban_acc" onclick="ban_acc (' . $data_acc['ID_PROFILE'] . ')">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Khóa</a>
+                            ';
+                    } else if ($data_acc['STATUS'] == 2) {
+                        $stt_acc = '<label class="label label-warning">Đã khóa</label>
+                            <a class="label label-danger" id="unban_acc" onclick="unban_acc (' . $data_acc['ID_PROFILE'] . ')">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Mở khóa</a>
+                            ';
                     }
 
 
