@@ -5,6 +5,7 @@
   <div class="row content">
     <div class="col-sm-2 sidenav list-group">
         <h4>Danh Sách Môn Học</h4>
+        <hr>
     	<?php
          $sql="SELECT * FROM news_category_type";
          $result= mysqli_query($conn,$sql);

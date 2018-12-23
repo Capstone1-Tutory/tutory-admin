@@ -39,7 +39,7 @@ include('../module/config.php');
             <div class="col-sm-3 avatanews">
               <div>
                 <p><?php echo $row["NAME"]?></p>
-                <img src="../image/imageUSER/<?php echo $row["URL_AVATAR"] ?>" class="img-circle" height="100px" width="100px" alt="Avatar">
+                <img src="../image/imageUSER/<?php if($row['URL_AVATAR']!="")echo $row['URL_AVATAR'];else echo "avatar.jpg";?>" class="img-circle" height="100px" width="100px" alt="Avatar">
               </div>
            </div>
            <div class="col-sm-8 detailnews">
