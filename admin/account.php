@@ -51,17 +51,25 @@ if ($user) {
                 new Redirect($_DOMAIN . 'account'); // Trở về trang danh sách tài khoản
             }
         }
-        // Xoá tài khoản
-        // Xoá nhiều tài khoản cùng lúc     
-        else if ($action == 'del_acc') {
-            foreach ($_POST['id_user'] as $key => $id_user) {
-                $sql_check_ID_USER_exist = "SELECT ID_USER FROM user_acount UA, user_profile UP WHERE UA.ID_USER = '$id_user' AND UA.ID_USER = UP.ID_USER";
-                if ($db->num_rows($sql_check_ID_USER_exist)) {
-                    $sql_del_acc = "DELETE  user_account, user_profile FROM user_account, user_profile WHERE user_account.ID_USER = user_profile.ID_USER AND user_account.ID_USER = '$id_user'";
-                    $db->query($sql_del_acc);
-                }
+        // Khoá tài khoản
+        else if ($action == 'ban_acc') {
+            $id_profile = trim(htmlspecialchars(addslashes($_POST['id_profile'])));
+            $sql_check_ID_PROFILE_exist = "SELECT ID_PROFILE FROM user_profile WHERE ID_PROFILE = '$id_profile'";
+            if ($db->num_rows($sql_check_ID_PROFILE_exist)) {
+                $sql_ban_acc = "UPDATE user_profile SET STATUS = '2' WHERE ID_PROFILE = '$id_profile'";
+                $db->query($sql_ban_acc);
+                $db->close();
             }
-            $db->close();
+        }
+        //mở khóa tài khoản
+        else if ($action == 'unban_acc') {
+            $id_profile = trim(htmlspecialchars(addslashes($_POST['id_profile'])));
+            $sql_check_ID_PROFILE_exist = "SELECT ID_PROFILE FROM user_profile WHERE ID_PROFILE = '$id_profile'";
+            if ($db->num_rows($sql_check_ID_PROFILE_exist)) {
+                $sql_unban_acc = "UPDATE user_profile SET STATUS = '0' WHERE ID_PROFILE = '$id_profile'";
+                $db->query($sql_unban_acc);
+                $db->close();
+            }
         }
         //tìm kiếm tài khoản
         else if ($action == 'search_acc') {

@@ -221,39 +221,46 @@ $('#formAddAcc button').on('click', function () {
         });
     }
 });
-// Xoá nhiều tài khoản cùng lúc
-$('#del_acc').on('click', function () {
-    $confirm = confirm('Bạn có chắc chắn muốn xoá các tài khoản đã chọn không?');
+// Khoá tài khoản
+function ban_acc(idprofile) {
+    $confirm = confirm('Bạn có muốn khóa tài khoản này không?');
     if ($confirm == true) {
-        $id_user = [];
-
-        $('#list_acc input[type="checkbox"]:checkbox:checked').each(function (i) {
-            $id_user[i] = $(this).val();
+        $.ajax({
+            url: $_DOMAIN + 'account.php',
+            type: 'POST',
+            data: {
+                id_profile: idprofile,
+                action: 'ban_acc'
+            },
+            success: function () {
+                location.reload();
+                alert('Khóa thành công.');
+            }, error: function () {
+                alert('Không thể khóa vào lúc này, vui lòng thử lại sau.');
+            }
         });
-
-        if ($id_user.length === 0) {
-            alert('Vui lòng chọn ít nhất một tài khoản.');
-        }
-        else {
-            $.ajax({
-                url: $_DOMAIN + 'account.php',
-                type: 'POST',
-                data: {
-                    id_user: $id_user,
-                    action: 'del_acc'
-                },
-                success: function (data) {
-                    $('#list_acc').html(data);
-                }, error: function () {
-                    alert('Đã có lỗi xảy ra, hãy thử lại.');
-                }
-            });
-        }
     }
-    else {
-        return false;
+}
+//Mở khóa tài khoản
+function unban_acc(idprofile) {
+    $confirm = confirm('Bạn có muốn mở khóa tài khoản này không?');
+    if ($confirm == true) {
+        $.ajax({
+            url: $_DOMAIN + 'account.php',
+            type: 'POST',
+            data: {
+                id_profile: idprofile,
+                action: 'unban_acc'
+            },
+            success: function () {
+                location.reload();
+                alert('Mở khóa thành công.');
+            }, error: function () {
+                alert('Không thể khóa vào lúc này, vui lòng thử lại sau.');
+            }
+        });
     }
-});
+}
 // lấy id chuyên ngành để đổ ra gia sư
 $('#major_add_course').on('click', function () {
     $id_major = $('#major_add_course').val();
