@@ -43,7 +43,7 @@
             <label for="imageUpload"></label>
         </div>
         <div class="avatar-preview">
-            <div id="imagePreview" style="background-image: url('../../image/imageUSER/<?php echo $row["URL_AVATAR"] ?>');">
+            <div id="imagePreview" style="background-image: url('../../image/imageUSER/<?php if($row['URL_AVATAR']!="")echo $row['URL_AVATAR'];else echo "avatar.jpg";?>');">
             </div>
         </div>
        

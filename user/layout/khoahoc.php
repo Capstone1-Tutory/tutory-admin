@@ -11,7 +11,7 @@ include('../module/config.php');
 inner join major on major.ID_MAJOR = course.ID_MAJOR
 inner join tutor on tutor.ID_TUTOR = course.ID_TUTOR
 inner join user_profile on tutor.ID_PROFILE= user_profile.ID_PROFILE
-where course.COURSE_STATUS=1 
+where course.COURSE_STATUS=1 and course.COURSE_START_DATE > (Select NOW())
 order by COURSE_START_DATE DESC" ;
   $sqlidprofile="SELECT user_profile.ID_PROFILE from user_profile where ID_USER='{$user}'";
   $rowprofile=mysqli_fetch_assoc(mysqli_query($conn,$sqlidprofile));
